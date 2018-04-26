@@ -77,13 +77,13 @@ Except where otherwise noted, syntax descriptions are expressed in the ABNF form
 
 Glossary terms are formatted like _this_.
 
-Syntax descriptions and code are formatted in monospace type.
+Syntax descriptions and code are formatted in `<monospace.>` type.
 
 Replaceable items, that is, an item intended to be replaced by a value, are formatted in _monospace cursive_ type.
 
 Notes are formatted as follows:
 
-**Note:** This is a note.
+>**Note:** This is a note.
 
 ## 1.3.Language Notes
 
