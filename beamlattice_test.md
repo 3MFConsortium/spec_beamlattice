@@ -153,6 +153,7 @@ This implies that the geometric surface of the lattice MUST be transformed as th
 ## 1.1. Beamlattice
 
 Element **\<beamlattice>**
+
 ![beamlattice XML structure](images/beamlattice.png)
 
 
@@ -169,5 +170,14 @@ Element **\<beamlattice>**
 
 A _beam lattice node_ provides information about _lattice_ data, in the form of a simplistic node-beam model as part of the mesh.
 
-A <beamlattice>; element acts as a container for beams and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
+A \<beamlattice> element acts as a container for beams and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
 
+##### Figure 2-2: Example images of clipping modes of a lattice against a sphere mesh
+
+![Clipping setup](images/clipping_setup.png)
+
+The lattice is to be clipped against a spherical clippingmesh.
+
+| ![clippingmode = none](images/clipping_none.png) | ![clippingmode = inside](images/clipping_inside.png) | ![clippingmode = outside](images/clipping_outside.png) |
+| --- | --- | --- |
+| Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
