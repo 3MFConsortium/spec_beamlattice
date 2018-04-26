@@ -134,7 +134,8 @@ A producer using the lattice specification MUST mark the extension as required, 
 
 # Chapter 2. Object
 
-Element **<mesh>**
+Element **\<mesh>**
+
 ![mesh XML structure](images/mesh.png)
 
 This 3MF extension specification defines a new &lt;beamlattice&gt; element that lives as child of the &lt;mesh&gt; element from the core 3MF specification, as the lattice structures are intended to be subject to the same coordinate system as the underlying mesh.  A beamlattice MUST only be added to a mesh object of type "model" or "solidsupport".
