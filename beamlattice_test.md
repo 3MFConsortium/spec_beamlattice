@@ -19,7 +19,7 @@
 
 Table of Contents
 
-Preface(#preface)        3
+[Preface](#preface)        3
 
 About this Specification        3
 
