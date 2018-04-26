@@ -19,7 +19,7 @@
 
 Table of Contents
 
-Preface        3
+Preface(#preface)        3
 
 About this Specification        3
 
@@ -59,7 +59,7 @@ References        23
 
 # Preface
 
-## 1.1.About this Specification
+## 1.1. About this Specification
 
 This 3MF beam lattice specification is an extension to the core 3MF specification. This document cannot stand alone and only applies as an addendum to the core 3MF specification. Usage of this and any other 3MF extensions follow an a la carte model, defined in the core 3MF specification.
 
@@ -71,7 +71,7 @@ The information contained in this specification is subject to change. Every effo
 
 This extension MUST be used only with Core specification 1.x.
 
-## 1.2.Document Conventions
+## 1.2. Document Conventions
 
 Except where otherwise noted, syntax descriptions are expressed in the ABNF format as defined in RFC 4234.
 
@@ -85,7 +85,7 @@ Notes are formatted as follows:
 
 >**Note:** This is a note.
 
-## 1.3.Language Notes
+## 1.3. Language Notes
 
 In this specification, the words that are used to define the significance of each requirement are written in uppercase. These words are used in accordance with their definitions in RFC 2119, and their respective meanings are reproduced below:
 
