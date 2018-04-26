@@ -27,7 +27,7 @@
 
 [Language Notes](#13-language-notes)
 
-[Software Conformance](#14software-conformance)
+[Software Conformance](#14-software-conformance)
 
 [Part I: 3MF Documents](#part-i-3mf-documents)
 
@@ -35,7 +35,7 @@
 
 [Chapter 2. Object](#chapter-2-object)
 
-[2.1.        Beamlattice]()
+[2.1.        Beamlattice](#11-beamlattice)
 
 [2.1.1.        Beams]()
 
@@ -155,7 +155,7 @@ This implies that the geometric surface of the lattice MUST be transformed as th
 Element **<beamlattice>**
 ![beamlattice XML structure](images/beamlattice.png)
 
-| Attributes |
+
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
 | minlength | **ST\_PositiveNumber** | required |   | A producer MUST specify the minimal length of all beams in the lattice. The producer MUST NOT produce zero length beams (i.e. shorter than minlength). The consumer MUST ignore all beams with length shorter than minlength. |
