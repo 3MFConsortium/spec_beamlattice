@@ -17,25 +17,42 @@
 | --- | --- |
 | **Status** | Published |
 
-##Table of Contents
+## Table of Contents
 
 [Preface](#preface)
+
 [About this Specification](#11-about-this-specification)
+
 [Document Conventions](#12-document-conventions)
+
 [Language Notes](#13-language-notes)
-[Software Conformance](#)
-[Part I: 3MF Documents](#)
-[Chapter 1. Overview of Additions]()
-[Chapter 2. Object]()
+
+[Software Conformance](#14software-conformance)
+
+[Part I: 3MF Documents](#part-i-3mf-documents)
+
+[Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
+
+[Chapter 2. Object](#chapter-2-object)
+
 [2.1.        Beamlattice]()
+
 [2.1.1.        Beams]()
+
 [2.1.2.        Beamsets]()
+
 [2.1.3.        Beam Set-Elements]()
+
 [Part II. Appendixes]()
+
 [Appendix A. Glossary]()
+
 [Appendix B. 3MF XSD Schema]()
+
 [Appendix C. Standard Namespace]()
+
 [Appendix D: Example file]()
+
 [References]()
 
 
@@ -76,7 +93,7 @@ In this specification, the words that are used to define the significance of eac
 - _SHOULD._ This word, or the adjective "RECOMMENDED" means that there may exist valid reasons in particular circumstances to ignore this item, but the full implications should be understood and the case carefully weighed before choosing a different course.
 - _MAY._ This word, or the adjective "OPTIONAL" means that this item is truly optional. For example, one implementation may choose to include the item because a particular marketplace or scenario requires it or because it enhances the product. Another implementation may omit the same item.
 
-## 1.4.Software Conformance
+## 1.4. Software Conformance
 
 Most requirements are expressed as format or package requirements rather than implementation requirements.
 
@@ -120,7 +137,7 @@ A producer using the lattice specification MUST mark the extension as required, 
 Element **<mesh>**
 ![mesh XML structure](images/mesh.png)
 
-This 3MF extension specification defines a new &lt;beamlattice&gt; element that lives as child of the &lt;mesh&gt; element from the core 3MF specification, as the lattice structures are intended to be subject to the same coordinate system as the underlying mesh.  A beamlattice MUST only be added to a mesh object of type &quot;model&quot; or &quot;solidsupport&quot;.
+This 3MF extension specification defines a new &lt;beamlattice&gt; element that lives as child of the &lt;mesh&gt; element from the core 3MF specification, as the lattice structures are intended to be subject to the same coordinate system as the underlying mesh.  A beamlattice MUST only be added to a mesh object of type "model" or "solidsupport".
 
 The triangle mesh geometry MUST be unified with the lattice geometry according to the positive fill rule (for the triangles). In case of an overlap, the properties of the triangle mesh geometry MUST prevail in the overlapping region.
 
@@ -132,10 +149,9 @@ This implies that the geometric surface of the lattice MUST be transformed as th
 
 >**Note:** The corresponding rules for mirroring are applied implicitly.
 
-1.
-  1. 1.1. Beamlattice
+## 1.1. Beamlattice
 
-Element **&lt;beamlattice&gt;**
+Element **<beamlattice>**
 ![beamlattice XML structure](images/beamlattice.png)
 
 | Attributes |
@@ -147,17 +163,17 @@ Element **&lt;beamlattice&gt;**
 - **none** : The lattice is not clipped at any mesh boundary.
 - **inside** : The lattice is clipped by the volume described by the referenced clippingmesh. All geometry inside the volume (according to the positive fill rule) is retained.
 - **outside** : The lattice is clipped by the volume described by the referenced clippingmesh. All geometry outside the volume (according to the positive fill rule) is retained.
-If clipping mode is not equal to &quot;none&quot;, a clippingmesh resource MUST be specified. |
-| clippingmesh   | **ST\_ResourceID** | optional   |   | Required, if clippingmode is different to &quot;none&quot;. The clippingmesh attribute MUST reference an object id earlier in the file. The object MUST be a mesh object of type &quot;model&quot; (i.e. not a components object), and MUST NOT contain a beamlattice. The clippingmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). |
-| representationmesh | **ST\_ResourceID** | optional  |   | References a mesh object that represents the intentional shape of the lattice geometry. It is up to the producer to decide the appropriate level of fidelity of the geometry. The consumer MAY use this for display and preview purposes and MUST NOT use it for manufacturing the part.The object MUST be a mesh object of type &quot;model&quot; (i.e. not a components object). The representationmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). The representationmesh attribute MUST reference an object id earlier in the file. |
+If clipping mode is not equal to "none", a clippingmesh resource MUST be specified. |
+| clippingmesh   | **ST\_ResourceID** | optional   |   | Required, if clippingmode is different to "none". The clippingmesh attribute MUST reference an object id earlier in the file. The object MUST be a mesh object of type "model" (i.e. not a components object), and MUST NOT contain a beamlattice. The clippingmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). |
+| representationmesh | **ST\_ResourceID** | optional  |   | References a mesh object that represents the intentional shape of the lattice geometry. It is up to the producer to decide the appropriate level of fidelity of the geometry. The consumer MAY use this for display and preview purposes and MUST NOT use it for manufacturing the part.The object MUST be a mesh object of type "model" (i.e. not a components object). The representationmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). The representationmesh attribute MUST reference an object id earlier in the file. |
 | pid | **ST\_ResourceID** | optional |   | Overrides the object-level pid as default for all beams. |
 | pindex | **ST\_ResourceIndex** | optional |   | Overrides the object-level pindex as default for all beams. |
 | cap   | **ST\_CapMode** | optional | sphere   | Default capping mode for beam ends (see below). Possible values:
-- &quot;hemisphere&quot;: the beam end will be closed at its end nodes by a half sphere.
-- &quot;sphere&quot;: the beam end will be closed at its end nodes by a sphere.
-- &quot;butt&quot;: the beam end will be closed with a flat end and therefore have a cylindrical or conical shape. |
+- "hemisphere": the beam end will be closed at its end nodes by a half sphere.
+- "sphere": the beam end will be closed at its end nodes by a sphere.
+- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape. |
 
 A _beam lattice node_ provides information about _lattice_ data, in the form of a simplistic node-beam model as part of the mesh.
 
-A &lt;beamlattice&gt; element acts as a container for beams and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
+A <beamlattice>; element acts as a container for beams and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
 
