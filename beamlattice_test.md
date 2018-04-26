@@ -174,10 +174,9 @@ A \<beamlattice> element acts as a container for beams and beam sets. The lattic
 
 ##### Figure 2-2: Example images of clipping modes of a lattice against a sphere mesh
 
-![Clipping setup](images/clipping_setup.png)
-
-The lattice is to be clipped against a spherical clippingmesh.
-
+| ![Clipping setup](images/clipping_setup.png) |
+| --- |
+| The lattice is to be clipped against a spherical clippingmesh. |
 | ![clippingmode = none](images/clipping_none.png) | ![clippingmode = inside](images/clipping_inside.png) | ![clippingmode = outside](images/clipping_outside.png) |
 | --- | --- | --- |
 | Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
