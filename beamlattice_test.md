@@ -182,3 +182,47 @@ The lattice is to be clipped against a spherical clippingmesh.
 | ![clippingmode = none](images/clipping_none.png) | ![clippingmode = inside](images/clipping_inside.png) | ![clippingmode = outside](images/clipping_outside.png) |
 | :---: | :---: | :---: |
 | Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
+
+### 1.1.1. Beams
+
+Element **\<beams>**
+
+![beams XML structure](images/beams.png)
+
+A _beam lattice node_ contains a _beams node_ that contains all the beam data.
+
+A \<beams> element acts as a container for beams. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A beams element MUST NOT contain more than 2^31-1 beams.
+
+#### 1.1.1.1.Beam elements
+
+Element **\<beam>**
+
+![beam XML structure](images/beam.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| v1   | **ST\_ResourceIndex**   | required   |   | References a zero-based index into the vertices of this mesh. Defines the first vertex of the beam. |
+| v2   | **ST\_ResourceIndex** | required   |   | References a zero-based index into the vertices of this mesh. Defines the second vertex of the beam. |
+| r1   | **ST\_PositiveNumber**   | optional   |   | Defines the radius of the first vertex of beam. If not given, the value defaults to the radius value of the beamlattice. |
+| r2   | **ST\_PositiveNumber**   | optional   |   | Defines the radius of the second vertex of the beam. MUST not be defined, if r1 is not defined.If r2 is not defined, the value defaults to the value of r1. If not given, the value defaults to the radius value of the beamlattice. |
+| p1 | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for the first vertex of the beam. |
+| p2 | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for the second vertex of the beam. |
+| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for the beam. |
+| cap1   | **ST\_CapMode** | optional |   | Capping mode for the end of the beam (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape.<br/>If no cap is given, defaults to the beamlattice cap mode. |
+| cap2 | **ST\_CapMode** | optional |   | Capping mode for the end of the beam (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape.<br/>If no cap is given, defaults to the beamlattice cap mode. |
+
+Lattice beams are attached to standard vertex elements of the mesh object. This allows an exact connectivity of them to the surface on the one hand, and gives a central location for all spatial properties of a single mesh. Furthermore, the transform behavior plugs into the standard way of mesh transformations and components as defined in the core specification.
+
+>**Note:** This might lead to vertex elements in the 3MF that are not part of the mesh surface.
+
+A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate frame).
+
+| ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
+
+The beam geometry is given by a conical frustum, while the beam's end geometry is given by the capmode.
+
+- If the capmode is "butt", the frustum is kept with flat ends.
+- If the capmode is "sphere", the frustum is capped with spheres of specified radii.
+- If the capmode is "hemisphere", the frustum is capped with half spheres of specified radii.
+
+
