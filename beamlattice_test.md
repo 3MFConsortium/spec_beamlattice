@@ -193,7 +193,7 @@ A _beam lattice node_ contains a _beams node_ that contains all the beam data.
 
 A \<beams> element acts as a container for beams. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A beams element MUST NOT contain more than 2^31-1 beams.
 
-#### 1.1.1.1.Beam elements
+#### 1.1.1.1. Beam elements
 
 Element **\<beam>**
 
@@ -235,3 +235,13 @@ A beam MAY combine two different capmodes on either vertex.
 >**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
 
 The unification of all beam geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
+
+![geometry unification](images/unification.png)
+
+The beam radii can be given by a variety of combinations. These MUST be interpreted in the following order:
+
+- If both radii are given, they determine the geometry.
+- If only r1 is given, the beam will be cylindrical with radius r1.
+- If no radius is given, the beam will be cylindrical with the radius defined in the beamlattice.
+
+Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
