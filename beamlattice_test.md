@@ -37,7 +37,7 @@
 
 [2.1.        Beamlattice](#11-beamlattice)
 
-[2.1.1.        Beams]()
+[2.1.1.        Beams](#111-beams)
 
 [2.1.2.        Beamsets]()
 
@@ -218,6 +218,7 @@ Lattice beams are attached to standard vertex elements of the mesh object. This 
 A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate frame).
 
 | ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
+| --- | --- |
 
 The beam geometry is given by a conical frustum, while the beam's end geometry is given by the capmode.
 
@@ -225,4 +226,12 @@ The beam geometry is given by a conical frustum, while the beam's end geometry i
 - If the capmode is "sphere", the frustum is capped with spheres of specified radii.
 - If the capmode is "hemisphere", the frustum is capped with half spheres of specified radii.
 
+| ![capmode butt](images/capmode_butt.png) | ![capmode sphere](images/capmode_sphere.png) | ![capmode hemisphere](images/capmode_hemisphere.png) |
+| :---: | :---: | :---: |
+| capmode "butt" | capmode "sphere" | capmode "hemisphere" |
 
+A beam MAY combine two different capmodes on either vertex.
+
+>**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
+
+The unification of all beam geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
