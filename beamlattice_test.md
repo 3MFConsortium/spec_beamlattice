@@ -39,21 +39,21 @@
 
 [2.1.1.        Beams](#111-beams)
 
-[2.1.2.        Beamsets]()
+[2.1.2.        Beamsets](#112-beamsets)
 
-[2.1.3.        Beam Set-Elements]()
+[2.1.3.        Beam Set-Elements](#113-beam-set-elements)
 
-[Part II. Appendixes]()
+[Part II. Appendixes](#part-ii-appendixes)
 
-[Appendix A. Glossary]()
+[Appendix A. Glossary](#appendix-a-glossary)
 
-[Appendix B. 3MF XSD Schema]()
+[Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
 
-[Appendix C. Standard Namespace]()
+[Appendix C. Standard Namespace](#appendix-c-standard-namespace)
 
-[Appendix D: Example file]()
+[Appendix D: Example file](#appendix-d-example-file)
 
-[References]()
+[References](#references)
 
 
 
@@ -278,7 +278,9 @@ A _beam set_ contains a reference list to a subset of beams to apply grouping op
 #### 1.1.3.1. Beam Set References
 
 Element **\<ref>**
+
 IMAGE
+
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
 | index   | **ST\_ResourceIndex**   | required   |   | References an index in the beamlattice beam list. |
