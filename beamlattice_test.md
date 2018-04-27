@@ -245,3 +245,290 @@ The beam radii can be given by a variety of combinations. These MUST be interpre
 - If no radius is given, the beam will be cylindrical with the radius defined in the beamlattice.
 
 Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
+
+| IMAGE | IMAGE | IMAGE|
+| --- | --- | --- |
+| _Properties applied to nodes_ | _Properties applied to line_ | _Properties extended to beam surface_ |
+
+>**Note:** Properties MUST be applied in the local coordinate system.
+
+### 1.1.2. Beamsets
+
+Element **\<beamsets>**
+
+IMAGE
+
+A _beam lattice node_ MAY contain a _beamsets node_ that contains information how beams are grouped and organized.
+
+A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced by metadata.
+
+### 1.1.3. Beam Set-Elements
+
+Element **\<beamset>**
+
+IMAGE
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| name   | **ST\_String**   | optional   |   | Human-readable name of the beam collection |
+| identifier | **ST\_String** | optional |   | Might be used for external identification of the beam collection data. Does not need to be unique. |
+
+A _beam set_ contains a reference list to a subset of beams to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
+
+#### 1.1.3.1. Beam Set References
+
+Element **\<ref>**
+IMAGE
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| index   | **ST\_ResourceIndex**   | required   |   | References an index in the beamlattice beam list. |
+
+A \<ref> element in a beam set refers to the zero-based indexed \<beam> elements that are contained in the _beamlattice node._
+
+A beamset is a collection of references to beams. Since beamsets do not have a specific influence on the geometrical shape, a consumer MAY ignore the information.
+
+A consumer MUST ignore duplicate references to the same beam in one set. A producer SHOULD avoid creating duplicate references to the same beam in one set.
+
+
+
+# Part II. Appendixes
+
+## Appendix A. Glossary
+
+**3D model.** The markup that defines a model for output.
+
+**3D Model part.** The OPC part that contains a 3D model.
+
+**3D Texture part.** A file used to apply complex information to a 3D object in the 3D Model part. In this extension spec, it is specifically a TBMP file.
+
+**3MF.** The 3D Manufacturing Format described by this specification, defining one or more 3D objects intended for output to a physical form.
+
+**3MF Document.** The digital manifestation of an OPC package that contains a 3D payload that conforms with the 3MF specification.
+
+**Composite material.** A material that is comprised of a ratio of other materials.
+
+**Consumer.** A software, service, or device that reads in a 3MF Document.
+
+**Editor.** A software, service, or device that both reads in and writes out 3MF Documents, possibly changing the content in between.
+
+**Material.** The description of a physical substance that can be used to output an object.
+
+**Material resource.** A potential resource that might be referenced by an object to describe what the object will be made of.
+
+**Producer.** A software, service, or device that writes out a 3MF Document.
+
+**Resource.** A texture, color, material, action, or object that could be used by another resource or might be necessary to build a physical 3D object according to build instructions.
+
+**Texture resource.** A resource that describes a subset of the 3D data to be used and how it is to be tiled.
+
+**XML namespace.** A namespace declared on the \<model> element, in accordance with the XML Namespaces specification.
+
+## Appendix B. 3MF XSD Schema
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace"targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
+  <xs:annotation>
+    <xs:documentation>
+      <![CDATA[
+    Schema notes:
+ 
+    Items within this schema follow a simple naming convention of appending a prefix indicating the type of element for references:
+ 
+    Unprefixed: Element names
+    CT_: Complex types
+    ST_: Simple types
+   
+    ]]>
+    </xs:documentation>
+  </xs:annotation>
+  <!-- Complex Types -->
+  <xs:complexType name="CT_Mesh">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+      <xs:element ref="beamlattice" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CT_BeamLattice">
+    <xs:sequence>
+       <xs:element ref="beams"/>
+       <xs:element ref="beamsets" minOccurs="0" maxOccurs="1"/>
+       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
+    </xs:sequence>
+    <xs:attribute name="minlength" type="ST_PositiveNumber" use="required"/>
+    <xs:attribute name="radius" type="ST_PositiveNumber" use="required"/>
+    <xs:attribute name="clippingmode" type="ST_ClippingMode" default="none"/>
+    <xs:attribute name="clippingmesh" type="ST_ResourceID" />
+    <xs:attribute name="representationmesh" type="ST_ResourceID" />
+    <xs:attribute name="pid" type="ST_ResourceID" />
+    <xs:attribute name="pindex" type="ST_ResourceIndex" />
+    <xs:attribute name="cap" type="ST_CapMode" />
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+   <xs:complexType name="CT_Beam">
+     <xs:sequence>
+       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+     </xs:sequence>
+    <xs:attribute name="v1" type="ST_ResourceIndex" use="required" />
+    <xs:attribute name="v2" type="ST_ResourceIndex" use="required" />
+    <xs:attribute name="r1" type="ST_PositiveNumber" />
+    <xs:attribute name="r2" type="ST_PositiveNumber" />
+    <xs:attribute name="p1" type="ST_ResourceIndex" />
+    <xs:attribute name="p2" type="ST_ResourceIndex" />
+    <xs:attribute name="pid" type="ST_ResourceID" />
+    <xs:attribute name="cap1" type="ST_CapMode" />
+    <xs:attribute name="cap2" type="ST_CapMode" />
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+  <xs:complexType name="CT_Beams">
+      <xs:sequence>
+        <xs:element ref="beam" minOccurs="0" maxOccurs="2147483647"/>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+      </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CT_BeamSet">
+    <xs:sequence>
+      <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="identifier" type="xs:string"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_BeamSets">
+    <xs:sequence>
+      <xs:element ref="beamset" minOccurs="0" maxOccurs="2147483647"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CT_Ref">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <!-- Simple Types -->
+  <xs:simpleType name="ST_ClippingMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="inside"/>
+      <xs:enumeration value="outisde"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_CapMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="hemisphere"/>
+      <xs:enumeration value="sphere"/>
+      <xs:enumeration value="butt"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_ResourceID">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxExclusive value="2147483648"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_PositiveNumber">
+    <xs:restriction base="xs:double">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="((\+)?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))((e|E)(\-|\+)?[0-9]+)?)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_ResourceIndex">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxExclusive value="2147483648"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Elements -->
+  <xs:element name="beam" type="CT_Beam"/>
+  <xs:element name="beams" type="CT_Beams"/>
+  <xs:element name="ref" type="CT_Ref"/>
+  <xs:element name="beamset" type="CT_BeamSet"/>
+  <xs:element name="beamsets" type="CT_BeamSets"/>
+  <xs:element name="beamlattice" type="CT_BeamLattice"/>
+</xs:schema>
+```
+
+
+# Appendix C. Standard Namespace
+
+BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02](http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02)
+
+# Appendix D: Example file
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter" xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" requiredextensions="b">
+    <resources>
+        <object id="1" name="Box" partnumber="e1ef01d4-cbd4-4a62-86b6-9634e2ca198b" type="model">
+            <mesh>
+                <vertices>
+                    <vertex x="45.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="45.00000"/>
+                </vertices>
+                <b:beamlattice radius="1" minlength="0.0001" cap="sphere">
+                    <b:beams>
+                        <b:beam v1="0" v2="1" r1="1.50000" r2="1.60000"/>
+                        <b:beam v1="2" v2="0" r1="3.00000" r2="1.50000"/>
+                        <b:beam v1="1" v2="3" r1="1.60000" r2="3.00000"/>
+                        <b:beam v1="3" v2="2" r1="3.00000"/>
+                        <b:beam v1="2" v2="4" r1="3.00000" r2="2.00000"/>
+                        <b:beam v1="4" v2="5" r1="2.00000"/>
+                        <b:beam v1="5" v2="6" r1="2.00000"/>
+                        <b:beam v1="7" v2="6" r1="2.00000"/>
+                        <b:beam v1="1" v2="6" r1="1.60000" r2="2.00000"/>
+                        <b:beam v1="7" v2="4" r1="2.00000"/>
+                        <b:beam v1="7" v2="3" r1="2.00000" r2="3.00000"/>
+                        <b:beam v1="0" v2="5" r1="1.50000" r2="2.00000"/>
+                    </b:beams>
+                </b:beamlattice>
+            </mesh>
+        </object>
+    </resources>
+    <build>
+        <item objectid="1"/>
+    </build>
+</model>
+```
+
+# References
+
+**BNF of Generic URI Syntax**
+
+"BNF of Generic URI Syntax." World Wide Web Consortium. http://www.w3.org/Addressing/URL/5\_URI\_BNF.html
+
+**Open Packaging Conventions**
+
+Ecma International. "Office Open XML Part 2: Open Packaging Conventions." 2006. http://www.ecma-international.org
+
+**sRGB**
+
+Anderson, Matthew, Srinivasan Chandrasekar, Ricardo Motta, and Michael Stokes. "A Standard Default Color Space for the Internet-sRGB, Version 1.10." World Wide Web Consortium. 1996. http://www.w3.org/Graphics/Color/sRGB
+
+**Unicode**
+
+The Unicode Consortium. The Unicode Standard, Version 4.0.0, defined by: _The Unicode Standard, Version 4.0_. Boston, MA: Addison-Wesley, 2003.
+
+**XML**
+
+Bray, Tim, Eve Maler, Jean Paoli, C. M. Sperlberg-McQueen, and François Yergeau (editors). "Extensible Markup Language (XML) 1.0 (Fourth Edition)." World Wide Web Consortium. 2006. http://www.w3.org/TR/2006/REC-xml-20060816/
+
+XML C14N
+
+Boyer, John. "Canonical XML Version 1.0." World Wide Web Consortium. 2001. http://www.w3.org/TR/xml-c14n.
+
+XML Namespaces
+
+Bray, Tim, Dave Hollander, Andrew Layman, and Richard Tobin (editors). "Namespaces in XML 1.0 (Second Edition)." World Wide Web Consortium. 2006. http://www.w3.org/TR/2006/REC-xml-names-20060816/
+
+XML Schema
+
+Beech, David, Murray Maloney, Noah Mendelsohn, and Henry S. Thompson (editors). "XML Schema Part 1: Structures," Second Edition. World Wide Web Consortium. 2004. http://www.w3.org/TR/2004/REC-xmlschema-1-20041028/
+
+Biron, Paul V. and Ashok Malhotra (editors). "XML Schema Part 2: Datatypes," Second Edition. World Wide Web Consortium. 2004. http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/
