@@ -1,3 +1,3 @@
-# specs
+# 3MF Beamlattice extension
 
-This repository contains full Markdown specifications for the 3MF file standard and its extensions.
+This repository contains the full specification for the 3MF Beamlattice extension.
