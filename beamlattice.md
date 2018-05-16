@@ -246,7 +246,7 @@ The beam radii can be given by a variety of combinations. These MUST be interpre
 
 Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
 
-| IMAGE | IMAGE | IMAGE|
+| ![properties applied to nodes](images/properties_1.png) | ![properties applied to line](images/properties_2.png) | ![properties applied to beam](images/properties_3.png)|
 | --- | --- | --- |
 | _Properties applied to nodes_ | _Properties applied to line_ | _Properties extended to beam surface_ |
 
@@ -256,7 +256,7 @@ Property values MUST be applied over the line as they would be applied over the 
 
 Element **\<beamsets>**
 
-IMAGE
+![beamsets](images/beamsets.png)
 
 A _beam lattice node_ MAY contain a _beamsets node_ that contains information how beams are grouped and organized.
 
@@ -266,7 +266,7 @@ A \<beamsets> element acts as a container for beamset nodes. The order of these 
 
 Element **\<beamset>**
 
-IMAGE
+![beamset](images/beamset.png)
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
@@ -279,7 +279,7 @@ A _beam set_ contains a reference list to a subset of beams to apply grouping op
 
 Element **\<ref>**
 
-IMAGE
+![ref](images/ref.png)
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
