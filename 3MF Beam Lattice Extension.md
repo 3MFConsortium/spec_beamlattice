@@ -1,5 +1,4 @@
-#
-# 3MF Beam Lattice Extension
+# ![3mf logo](images/3mf_logo_50px.png) 3MF Beam Lattice Extension
 
 ## Specification & Reference Guide
 
