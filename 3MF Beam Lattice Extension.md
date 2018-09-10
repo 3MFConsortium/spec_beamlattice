@@ -74,45 +74,17 @@ The information contained in this specification is subject to change. Every effo
 
 This extension MUST be used only with Core specification 1.x.
 
-## 1.2. Document Conventions
+## Document Conventions
 
-Except where otherwise noted, syntax descriptions are expressed in the ABNF format as defined in RFC 4234.
+See [the 3MF Core Specification conventions](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#document-conventions).
 
-Glossary terms are formatted like _this_.
+## Language Notes
 
-Syntax descriptions and code are formatted in `monospace` type.
+See [the 3MF Core Specification language notes](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#language-notes).
 
-Replaceable items, that is, an item intended to be replaced by a value, are formatted in _`monospace cursive`_ type.
+## Software Conformance
 
-Notes are formatted as follows:
-
->**Note:** This is a note.
-
-## 1.3. Language Notes
-
-In this specification, the words that are used to define the significance of each requirement are written in uppercase. These words are used in accordance with their definitions in RFC 2119, and their respective meanings are reproduced below:
-
-- _MUST._ This word, or the adjective "REQUIRED" means that the item is an absolute requirement of the specification.
-- _SHOULD._ This word, or the adjective "RECOMMENDED" means that there may exist valid reasons in particular circumstances to ignore this item, but the full implications should be understood and the case carefully weighed before choosing a different course.
-- _MAY._ This word, or the adjective "OPTIONAL" means that this item is truly optional. For example, one implementation may choose to include the item because a particular marketplace or scenario requires it or because it enhances the product. Another implementation may omit the same item.
-
-## 1.4. Software Conformance
-
-Most requirements are expressed as format or package requirements rather than implementation requirements.
-
-In order for consumers to be considered conformant, they must observe the following rules:
-
-- They MUST NOT report errors when processing conforming instances of the document format except when forced to do so by resource exhaustion.
-- They SHOULD report errors when processing non-conforming instances of the document format when doing so does not pose an undue processing or performance burden.
-
-In order for producers to be considered conformant, they must observe the following rules:
-
-- They MUST NOT generate any new, non-conforming instances of the document format.
-- They MUST NOT introduce any non-conformance when modifying an instance of the document format.
-
-Editing applications are subject to all of the above rules.
-
-
+See [the 3MF Core Specification software conformance](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#software-conformance).
 
 # Part I: 3MF Documents
 
