@@ -272,33 +272,7 @@ A consumer MUST ignore duplicate references to the same beam in one set. A produ
 
 ## Appendix A. Glossary
 
-**3D model.** The markup that defines a model for output.
-
-**3D Model part.** The OPC part that contains a 3D model.
-
-**3D Texture part.** A file used to apply complex information to a 3D object in the 3D Model part. In this extension spec, it is specifically a TBMP file.
-
-**3MF.** The 3D Manufacturing Format described by this specification, defining one or more 3D objects intended for output to a physical form.
-
-**3MF Document.** The digital manifestation of an OPC package that contains a 3D payload that conforms with the 3MF specification.
-
-**Composite material.** A material that is comprised of a ratio of other materials.
-
-**Consumer.** A software, service, or device that reads in a 3MF Document.
-
-**Editor.** A software, service, or device that both reads in and writes out 3MF Documents, possibly changing the content in between.
-
-**Material.** The description of a physical substance that can be used to output an object.
-
-**Material resource.** A potential resource that might be referenced by an object to describe what the object will be made of.
-
-**Producer.** A software, service, or device that writes out a 3MF Document.
-
-**Resource.** A texture, color, material, action, or object that could be used by another resource or might be necessary to build a physical 3D object according to build instructions.
-
-**Texture resource.** A resource that describes a subset of the 3D data to be used and how it is to be tiled.
-
-**XML namespace.** A namespace declared on the \<model> element, in accordance with the XML Namespaces specification.
+See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#appendix-a-glossary).
 
 ## Appendix B. 3MF XSD Schema
 
