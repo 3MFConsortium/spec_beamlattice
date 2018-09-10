@@ -22,43 +22,21 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 
 ## Table of Contents
 
-[Preface](#preface)
-
-[About this Specification](#11-about-this-specification)
-
-[Document Conventions](#12-document-conventions)
-
-[Language Notes](#13-language-notes)
-
-[Software Conformance](#14-software-conformance)
-
-[Part I: 3MF Documents](#part-i-3mf-documents)
-
-[Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
-
-[Chapter 2. Object](#chapter-2-object)
-
-[2.1.        Beamlattice](#11-beamlattice)
-
-[2.1.1.        Beams](#111-beams)
-
-[2.1.2.        Beamsets](#112-beamsets)
-
-[2.1.3.        Beam Set-Elements](#113-beam-set-elements)
-
-[Part II. Appendixes](#part-ii-appendixes)
-
-[Appendix A. Glossary](#appendix-a-glossary)
-
-[Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
-
-[Appendix C. Standard Namespace](#appendix-c-standard-namespace)
-
-[Appendix D: Example file](#appendix-d-example-file)
-
-[References](#references)
-
-
+- [Preface](#preface)
+  * [1.1. About this Specification](#11-about-this-specification)
+  * [Document Conventions](#document-conventions)
+  * [Language Notes](#language-notes)
+  * [Software Conformance](#software-conformance)
+- [Part I: 3MF Documents](#part-i-3mf-documents)
+- [Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
+- [Chapter 2. Object](#chapter-2-object)
+  * [1.1. Beamlattice](#11-beamlattice)
+- [Part II. Appendixes](#part-ii-appendixes)
+  * [Appendix A. Glossary](#appendix-a-glossary)
+  * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
+- [Appendix C. Standard Namespace](#appendix-c-standard-namespace)
+- [Appendix D: Example file](#appendix-d-example-file)
+- [References](#references)
 
 # Preface
 
