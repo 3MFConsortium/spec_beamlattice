@@ -12,7 +12,7 @@
 
 
 
-| **Version** | 1.02 |
+| **Version** | 1.0.3 |
 | --- | --- |
 | **Status** | Published |
 
@@ -22,43 +22,21 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 
 ## Table of Contents
 
-[Preface](#preface)
-
-[About this Specification](#11-about-this-specification)
-
-[Document Conventions](#12-document-conventions)
-
-[Language Notes](#13-language-notes)
-
-[Software Conformance](#14-software-conformance)
-
-[Part I: 3MF Documents](#part-i-3mf-documents)
-
-[Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
-
-[Chapter 2. Object](#chapter-2-object)
-
-[2.1.        Beamlattice](#11-beamlattice)
-
-[2.1.1.        Beams](#111-beams)
-
-[2.1.2.        Beamsets](#112-beamsets)
-
-[2.1.3.        Beam Set-Elements](#113-beam-set-elements)
-
-[Part II. Appendixes](#part-ii-appendixes)
-
-[Appendix A. Glossary](#appendix-a-glossary)
-
-[Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
-
-[Appendix C. Standard Namespace](#appendix-c-standard-namespace)
-
-[Appendix D: Example file](#appendix-d-example-file)
-
-[References](#references)
-
-
+- [Preface](#preface)
+  * [1.1. About this Specification](#11-about-this-specification)
+  * [Document Conventions](#document-conventions)
+  * [Language Notes](#language-notes)
+  * [Software Conformance](#software-conformance)
+- [Part I: 3MF Documents](#part-i-3mf-documents)
+- [Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
+- [Chapter 2. Object](#chapter-2-object)
+  * [1.1. Beamlattice](#11-beamlattice)
+- [Part II. Appendixes](#part-ii-appendixes)
+  * [Appendix A. Glossary](#appendix-a-glossary)
+  * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
+  * [Appendix C. Standard Namespace](#appendix-c-standard-namespace)
+  * [Appendix D: Example file](#appendix-d-example-file)
+- [References](#references)
 
 # Preface
 
@@ -74,45 +52,17 @@ The information contained in this specification is subject to change. Every effo
 
 This extension MUST be used only with Core specification 1.x.
 
-## 1.2. Document Conventions
+## Document Conventions
 
-Except where otherwise noted, syntax descriptions are expressed in the ABNF format as defined in RFC 4234.
+See [the 3MF Core Specification conventions](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#document-conventions).
 
-Glossary terms are formatted like _this_.
+## Language Notes
 
-Syntax descriptions and code are formatted in `monospace` type.
+See [the 3MF Core Specification language notes](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#language-notes).
 
-Replaceable items, that is, an item intended to be replaced by a value, are formatted in _`monospace cursive`_ type.
+## Software Conformance
 
-Notes are formatted as follows:
-
->**Note:** This is a note.
-
-## 1.3. Language Notes
-
-In this specification, the words that are used to define the significance of each requirement are written in uppercase. These words are used in accordance with their definitions in RFC 2119, and their respective meanings are reproduced below:
-
-- _MUST._ This word, or the adjective "REQUIRED" means that the item is an absolute requirement of the specification.
-- _SHOULD._ This word, or the adjective "RECOMMENDED" means that there may exist valid reasons in particular circumstances to ignore this item, but the full implications should be understood and the case carefully weighed before choosing a different course.
-- _MAY._ This word, or the adjective "OPTIONAL" means that this item is truly optional. For example, one implementation may choose to include the item because a particular marketplace or scenario requires it or because it enhances the product. Another implementation may omit the same item.
-
-## 1.4. Software Conformance
-
-Most requirements are expressed as format or package requirements rather than implementation requirements.
-
-In order for consumers to be considered conformant, they must observe the following rules:
-
-- They MUST NOT report errors when processing conforming instances of the document format except when forced to do so by resource exhaustion.
-- They SHOULD report errors when processing non-conforming instances of the document format when doing so does not pose an undue processing or performance burden.
-
-In order for producers to be considered conformant, they must observe the following rules:
-
-- They MUST NOT generate any new, non-conforming instances of the document format.
-- They MUST NOT introduce any non-conformance when modifying an instance of the document format.
-
-Editing applications are subject to all of the above rules.
-
-
+See [the 3MF Core Specification software conformance](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#software-conformance).
 
 # Part I: 3MF Documents
 
@@ -300,33 +250,7 @@ A consumer MUST ignore duplicate references to the same beam in one set. A produ
 
 ## Appendix A. Glossary
 
-**3D model.** The markup that defines a model for output.
-
-**3D Model part.** The OPC part that contains a 3D model.
-
-**3D Texture part.** A file used to apply complex information to a 3D object in the 3D Model part. In this extension spec, it is specifically a TBMP file.
-
-**3MF.** The 3D Manufacturing Format described by this specification, defining one or more 3D objects intended for output to a physical form.
-
-**3MF Document.** The digital manifestation of an OPC package that contains a 3D payload that conforms with the 3MF specification.
-
-**Composite material.** A material that is comprised of a ratio of other materials.
-
-**Consumer.** A software, service, or device that reads in a 3MF Document.
-
-**Editor.** A software, service, or device that both reads in and writes out 3MF Documents, possibly changing the content in between.
-
-**Material.** The description of a physical substance that can be used to output an object.
-
-**Material resource.** A potential resource that might be referenced by an object to describe what the object will be made of.
-
-**Producer.** A software, service, or device that writes out a 3MF Document.
-
-**Resource.** A texture, color, material, action, or object that could be used by another resource or might be necessary to build a physical 3D object according to build instructions.
-
-**Texture resource.** A resource that describes a subset of the 3D data to be used and how it is to be tiled.
-
-**XML namespace.** A namespace declared on the \<model> element, in accordance with the XML Namespaces specification.
+See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#appendix-a-glossary).
 
 ## Appendix B. 3MF XSD Schema
 
@@ -455,11 +379,11 @@ A consumer MUST ignore duplicate references to the same beam in one set. A produ
 ```
 
 
-# Appendix C. Standard Namespace
+## Appendix C. Standard Namespace
 
 BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02](http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02)
 
-# Appendix D: Example file
+## Appendix D: Example file
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -504,36 +428,6 @@ BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02
 
 # References
 
-**BNF of Generic URI Syntax**
+See [the 3MF Core Specification references](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#references).
 
-"BNF of Generic URI Syntax." World Wide Web Consortium. http://www.w3.org/Addressing/URL/5\_URI\_BNF.html
-
-**Open Packaging Conventions**
-
-Ecma International. "Office Open XML Part 2: Open Packaging Conventions." 2006. http://www.ecma-international.org
-
-**sRGB**
-
-Anderson, Matthew, Srinivasan Chandrasekar, Ricardo Motta, and Michael Stokes. "A Standard Default Color Space for the Internet-sRGB, Version 1.10." World Wide Web Consortium. 1996. http://www.w3.org/Graphics/Color/sRGB
-
-**Unicode**
-
-The Unicode Consortium. The Unicode Standard, Version 4.0.0, defined by: _The Unicode Standard, Version 4.0_. Boston, MA: Addison-Wesley, 2003.
-
-**XML**
-
-Bray, Tim, Eve Maler, Jean Paoli, C. M. Sperlberg-McQueen, and François Yergeau (editors). "Extensible Markup Language (XML) 1.0 (Fourth Edition)." World Wide Web Consortium. 2006. http://www.w3.org/TR/2006/REC-xml-20060816/
-
-XML C14N
-
-Boyer, John. "Canonical XML Version 1.0." World Wide Web Consortium. 2001. http://www.w3.org/TR/xml-c14n.
-
-XML Namespaces
-
-Bray, Tim, Dave Hollander, Andrew Layman, and Richard Tobin (editors). "Namespaces in XML 1.0 (Second Edition)." World Wide Web Consortium. 2006. http://www.w3.org/TR/2006/REC-xml-names-20060816/
-
-XML Schema
-
-Beech, David, Murray Maloney, Noah Mendelsohn, and Henry S. Thompson (editors). "XML Schema Part 1: Structures," Second Edition. World Wide Web Consortium. 2004. http://www.w3.org/TR/2004/REC-xmlschema-1-20041028/
-
-Biron, Paul V. and Ashok Malhotra (editors). "XML Schema Part 2: Datatypes," Second Edition. World Wide Web Consortium. 2004. http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/
+Copyright 3MF Consortium 2018.
