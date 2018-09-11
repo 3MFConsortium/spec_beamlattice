@@ -34,8 +34,8 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 - [Part II. Appendixes](#part-ii-appendixes)
   * [Appendix A. Glossary](#appendix-a-glossary)
   * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
-- [Appendix C. Standard Namespace](#appendix-c-standard-namespace)
-- [Appendix D: Example file](#appendix-d-example-file)
+  * [Appendix C. Standard Namespace](#appendix-c-standard-namespace)
+  * [Appendix D: Example file](#appendix-d-example-file)
 - [References](#references)
 
 # Preface
@@ -379,11 +379,11 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
 ```
 
 
-# Appendix C. Standard Namespace
+## Appendix C. Standard Namespace
 
 BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02](http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02)
 
-# Appendix D: Example file
+## Appendix D: Example file
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
