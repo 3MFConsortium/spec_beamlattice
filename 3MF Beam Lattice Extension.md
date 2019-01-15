@@ -344,7 +344,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>
       <xs:enumeration value="inside"/>
-      <xs:enumeration value="outisde"/>
+      <xs:enumeration value="outside"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ST_CapMode">
