@@ -35,11 +35,13 @@
 # 3. take the PDF and use it in a different release.
 
 # How to get this setup working:
-# 1. register on https://travis-ci.org
+# 1. A member of the 3MF consortium needs to register on https://travis-ci.org
 # 2. On https://travis-ci.org "sync" the "3MF Consortium" organization
-# 3. add a personal github access token to your account: https://github.com/settings/tokens
-# 4. enable this repo to be built and add an env-variable with name "GITHUB_API_KEY" and your access token as value.
-# 5. Tigger a build on https://travis-ci.org or commit to "master" to automatically start a build
+# 3. Add a personal github access token to your account: https://github.com/settings/tokens
+# 4. Add .travis.yml, and the folder markdownToPDF to this repo, ensure the .sh files are executable
+# 5. Ensure the "SPECNAME" below matches the name of the markdown-file you want to convert (without the extension ".md").
+# 6. Enable this repo to be built and add an env-variable with name "GITHUB_API_KEY" and your access token as value.
+# 7. Tigger a build on https://travis-ci.org or commit to "master" to automatically start a build
 # => On success a new release with the PDF as artifact should have been created.
 
 
@@ -51,10 +53,10 @@ env:
   - SPECNAME="3MF Beam Lattice Extension"
 install:
   - pip install grip
-  - ./mdToPDF/install_wkhtmltopdf.sh
+  - ./markdownToPDF/install_wkhtmltopdf.sh
 
 script:
-  - ./mdToPDF/mdToPDF.sh "$SPECNAME"
+  - ./markdownToPDF/mdToPDF.sh "$SPECNAME"
   
 deploy:
   provider: releases
