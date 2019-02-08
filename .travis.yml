@@ -22,28 +22,11 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Configuration file for Travis CI (https://travis-ci.org)
-#
 # It is used to create am easily distributable and printable PDF
 # version of a specification document written in markdown (3MF-style).
-# 
-# Each commit to this repository will trigger a build of this repository on https://travis-ci.org .
-# If this commit was performed on master, a new draft of a release that contains
-# the generated PDF as artifact will be created on the releases page of this repo.
-# You can
-# 1. discard it
-# 2. modify it to become a proper release of this specification or
-# 3. take the PDF and use it in a different release.
 
-# How to get this setup working:
-# 1. A member of the 3MF consortium needs to register on https://travis-ci.org
-# 2. On https://travis-ci.org "sync" the "3MF Consortium" organization
-# 3. Add a personal github access token to your account: https://github.com/settings/tokens
-# 4. Add .travis.yml, and the folder markdownToPDF to this repo, ensure the .sh files are executable
-# 5. Ensure the "SPECNAME" below matches the name of the markdown-file you want to convert (without the extension ".md").
-# 6. Enable this repo to be built and add an env-variable with name "GITHUB_API_KEY" and your access token as value.
-# 7. Tigger a build on https://travis-ci.org or commit to "master" to automatically start a build
-# => On success a new release with the PDF as artifact should have been created.
-
+# Documentation:
+#   https://github.com/3MFConsortium/spec_conventions/blob/master/generatePDFs/generatePDFs.md
 
 dist: xenial
 language: python
