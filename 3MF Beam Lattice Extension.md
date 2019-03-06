@@ -142,6 +142,7 @@ The lattice is to be clipped against a spherical clippingmesh.
 Element **\<caps>**
 
 ![beams XML structure](images/caps.png)
+
 A _beam lattice node_ can contains a _caps node_ that contains caps for vertices. This allows e.g. dumbbell shaped beams.
 
 ### 1.1.1 Cap
@@ -163,13 +164,13 @@ The cap defines a sphere at of a given radius at the position of vertex vindex. 
 Element **\<profiles>**
 
 ![beams XML structure](images/profiles.png)
+
 A _beam lattice node_ can contains a _caps node_ that contains caps for vertices. This allows e.g. dumbbell shaped beams.
 
 ### 1.2.1 Cap
 Element **\<profile>**
 
 ![beams XML structure](images/profile.png)
-
 
 A _profile element_ defines a 2D profile of a beam that is exstruded along the axis of a beam. The radius of this profile is defined by the local radius of the beam along its length.
 
@@ -216,6 +217,7 @@ Element **\<beam>**
 
 If no up-vector is specified, the default up-vector of the beamlattice is used.
 
+If the end of a beam is a vertex with a defined cap, this cap takes precedence.
 
 Lattice beams are attached to standard vertex elements of the mesh object. This allows an exact connectivity of them to the surface on the one hand, and gives a central location for all spatial properties of a single mesh. Furthermore, the transform behavior plugs into the standard way of mesh transformations and components as defined in the core specification.
 
