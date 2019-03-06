@@ -12,9 +12,9 @@
 
 
 
-| **Version** | 1.0.3 |
+| **Version** | 1.1 |
 | --- | --- |
-| **Status** | Published |
+| **Status** | Draft |
 
 ## Disclaimer
 
@@ -136,11 +136,57 @@ The lattice is to be clipped against a spherical clippingmesh.
 | :---: | :---: | :---: |
 | Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
 
+
+### 1.1. Caps
+
+Element **\<caps>**
+
+![beams XML structure](images/caps.png)
+A _beam lattice node_ can contains a _caps node_ that contains caps for vertices. This allows e.g. dumbbell shaped beams.
+
+### 1.1.1 Cap
+Element **\<cap>**
+
+![beams XML structure](images/cap.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| r   | **ST\_PositiveNumber** | required |    | The radius of this ball cap |
+| vindex   | **ST\_ResourceIndex** | required |    | The ResourceIndex of the vector this cap is applied to |
+
+The cap defines a sphere at of a given radius at the position of vertex vindex. If this radius is smaller than any adjacent beams' radius, use their radius. 
+
+
+
+### 1.2. Profiles
+
+Element **\<profiles>**
+
+![beams XML structure](images/profiles.png)
+A _beam lattice node_ can contains a _caps node_ that contains caps for vertices. This allows e.g. dumbbell shaped beams.
+
+### 1.2.1 Cap
+Element **\<profile>**
+
+![beams XML structure](images/profile.png)
+
+
+A _profile element_ defines a 2D profile of a beam that is exstruded along the axis of a beam. The radius of this profile is defined by the local radius of the beam along its length.
+
+The rotation of a beam profile around the beams axis (v) is such that the beam's up vector conincides with profiles first-vector in object coordinate space (where it is given by (t1,t2,v) ).
+
 ### 1.1.1. Beams
 
 Element **\<beams>**
 
 ![beams XML structure](images/beams.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| upx   | **ST\_Number** | optional |    | x-component of default up vector. If upx is specicied, upy and upz must be specified. |
+| upy   | **ST\_Number** | optional |    | y-component of default up vector. If upy is specicied upz must be specified. |
+| upz   | **ST\_Number** | optional |    | z-component of default up vector. |
+| minUpAngle   | **ST\_Number** | optional |    | if any cross-product of beam-directional vector and (upx, upy, upz) is smaller than minUpAngle, the choice of up-vector is up tp the consumer. |
 
 A _beam lattice node_ contains a _beams node_ that contains all the beam data.
 
@@ -163,6 +209,13 @@ Element **\<beam>**
 | pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for the beam. |
 | cap1   | **ST\_CapMode** | optional |   | Capping mode for the end of the beam (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape.<br/>If no cap is given, defaults to the beamlattice cap mode. |
 | cap2 | **ST\_CapMode** | optional |   | Capping mode for the end of the beam (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape.<br/>If no cap is given, defaults to the beamlattice cap mode. |
+| profileIndex   | **ST\_ResourceIndex** | optional |    | Index of the profile to be used for this beam. |
+| upx   | **ST\_Number** | optional |    | The x-component of the beam's up vector. If profileIndex is defined, upx must be defined. |
+| upy   | **ST\_Number** | optional |    | The y-component of the beam's up vector. If profileIndex is defined, upx must be defined. |
+| upz   | **ST\_Number** | optional |    | The y-component of the beam's up vector. If profileIndex is defined, upx must be defined. |
+
+If no up-vector is specified, the default up-vector of the beamlattice is used.
+
 
 Lattice beams are attached to standard vertex elements of the mesh object. This allows an exact connectivity of them to the surface on the one hand, and gives a central location for all spatial properties of a single mesh. Furthermore, the transform behavior plugs into the standard way of mesh transformations and components as defined in the core specification.
 

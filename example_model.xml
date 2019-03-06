@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter" xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" requiredextensions="b">
+    <resources>
+        <object id="1" name="Box" partnumber="e1ef01d4-cbd4-4a62-86b6-9634e2ca198b" type="model">
+            <mesh>
+                <vertices>
+                    <vertex x="45.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="45.00000"/>
+                </vertices>
+                <b:beamlattice radius="1" minlength="0.0001" cap="sphere">
+				
+					<b:caps>
+						<b:cap r="1.60000" vindex="0"/>
+						<b:cap r="2" vindex="2"/>
+						<!-- -->
+						<b:cap r="0.1" vindex="7"/>
+						<!-- if radius is smaller than any adjacent beams' radius, use their radius. -->
+					</b:caps>
+					
+					<b:profiles>
+						<b:profile>
+							<!-- (vertex0 - 0) is will be mapped to the up-direction. Must not be zero -->
+							<vertex x="1.0" y="0."/>
+							<vertex x="0.866" y="0.5"/>
+							<vertex x="0.707" y="0.707"/>
+							<vertex x="0.5" y="0.866"/>
+							<vertex x="0.0" y="1"/>
+							<vertex x="-1.0" y="0."/>
+							<vertex x="0" y="-1"/>
+							<vertex x="0.707" y="-0.707"/>
+							
+							<!-- not possible like that: pipe-profile -->
+						</b:profile>
+						<!-- ... -->
+					</b:profiles>
+					
+                    <b:beams upx="1.0" upy="-1" upz="-1.2" minUpAngle="1e-4">
+                        <b:beam v1="0" v2="1" r1="1.50000" r2="1.60000" profile="0" upx="1.0" upy="0.2" upz="-1.2"/>
+                        <b:beam v1="2" v2="0" r1="3.00000" r2="1.50000" profile="1" />
+                        <b:beam v1="1" v2="3" r1="1.60000" r2="3.00000"/>
+                        <b:beam v1="3" v2="2" r1="3.00000" profile="0" upx="2.0" upy="-0.2" upz="-3"/>
+                        <b:beam v1="2" v2="4" r1="3.00000" r2="2.00000"/>
+                        <b:beam v1="4" v2="5" r1="2.00000"/>
+                        <b:beam v1="5" v2="6" r1="2.00000"/>
+                        <b:beam v1="7" v2="6" r1="2.00000"/>
+                        <b:beam v1="1" v2="6" r1="1.60000" r2="2.00000"/>
+                        <b:beam v1="7" v2="4" r1="2.00000"/>
+                        <b:beam v1="7" v2="3" r1="2.00000" r2="3.00000"/>
+                        <b:beam v1="0" v2="5" r1="1.50000" r2="2.00000"/>
+                    </b:beams>
+                </b:beamlattice>
+            </mesh>
+        </object>
+    </resources>
+    <build>
+        <item objectid="1"/>
+    </build>
+</model>
