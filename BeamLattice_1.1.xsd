@@ -24,7 +24,7 @@
   <xs:complexType name="CT_BeamLattice">
     <xs:sequence>
 			<xs:element ref="profiles"/>
-			<xs:element ref="caps"/>
+			<xs:element ref="spheres"/>
        <xs:element ref="beams"/>
        <xs:element ref="beamsets" minOccurs="0" maxOccurs="1"/>
        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
@@ -37,6 +37,7 @@
     <xs:attribute name="pid" type="ST_ResourceID" />
     <xs:attribute name="pindex" type="ST_ResourceIndex" />
     <xs:attribute name="cap" type="ST_CapMode" />
+	<xs:attribute name="sphereradius" type="ST_PositiveNumber" use="optional"/>
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
    <xs:complexType name="CT_Beam">
@@ -91,7 +92,8 @@
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
 
-	<xs:complexType name="CT_Vertex">
+  
+	<xs:complexType name="CT_2DVertex">
 		<xs:sequence>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
 		</xs:sequence>
@@ -110,23 +112,24 @@
 			<xs:element ref="v" minOccurs="3" maxOccurs="2147483647"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
 		</xs:sequence>
-		<!--  <xs:attribute name="index" type="ST_ResourceIndex" use="required"/> -->
 		<xs:anyAttribute namespace="##other" processContents="lax"/>
 	</xs:complexType>
 
-	<xs:complexType name="CT_Caps">
+	<xs:complexType name="CT_Spheres">
 		<xs:sequence>
-			<xs:element ref="cap" minOccurs="0" maxOccurs="2147483647"/>
+			<xs:element ref="sphere" minOccurs="0" maxOccurs="2147483647"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
 		</xs:sequence>
 	</xs:complexType>
 
-	<xs:complexType name="CT_Cap">
+	<xs:complexType name="CT_Sphere">
 		<xs:sequence>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
 		</xs:sequence>
 		<xs:attribute name="r" type="ST_PositiveNumber" use="required"/>
 		<xs:attribute name="vindex" type="ST_ResourceIndex" use="required"/>
+		<xs:attribute name="p" type="ST_ResourceIndex" />
+		<xs:attribute name="pid" type="ST_ResourceID" />
 	</xs:complexType>
 	
 	<!-- Simple Types -->
@@ -167,9 +170,9 @@
   <xs:element name="beamset" type="CT_BeamSet"/>
   <xs:element name="beamsets" type="CT_BeamSets"/>
 	<xs:element name="beamlattice" type="CT_BeamLattice"/>
-	<xs:element name="caps" type="CT_Caps"/>
-	<xs:element name="cap" type="CT_Cap"/>
+	<xs:element name="spheres" type="CT_Spheres"/>
+	<xs:element name="sphere" type="CT_Sphere"/>
 	<xs:element name="profiles" type="CT_Profiles"/>
 	<xs:element name="profile" type="CT_Profile"/>
-	<xs:element name="v" type="CT_Vertex"/>
+	<xs:element name="v" type="CT_2DVertex"/>
 </xs:schema>

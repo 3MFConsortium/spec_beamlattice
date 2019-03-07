@@ -137,27 +137,34 @@ The lattice is to be clipped against a spherical clippingmesh.
 | Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
 
 
-### 1.1. Caps
+### 1.1. Spheres
 
-Element **\<caps>**
+Element **\<spheres>**
 
-![beams XML structure](images/caps.png)
+![beams XML structure](images/spheres.png)
 
-A _beam lattice node_ can contains a _caps node_ that contains caps for vertices. This allows e.g. dumbbell shaped beams.
+A _beam lattice node_ can contain a _spheres node_ that contains spheres around vertices. This allows e.g. dumbbell shaped beams.
 
-### 1.1.1 Cap
-Element **\<cap>**
 
-![beams XML structure](images/cap.png)
+### 1.1.1 Sphere
+Element **\<sphere>**
+
+![beams XML structure](images/sphere.png)
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
-| r   | **ST\_PositiveNumber** | required |    | The radius of this ball cap |
-| vindex   | **ST\_ResourceIndex** | required |    | The ResourceIndex of the vector this cap is applied to |
+| r   | **ST\_PositiveNumber** | optional |    | The radius of this sphere |
+| vindex   | **ST\_ResourceIndex** | required |    | The ResourceIndex of the vertex that serves as center for this sphere |
+| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
+| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
 
-The cap defines a sphere at of a given radius at the position of vertex vindex. If this radius is smaller than any adjacent beams' radius, use their radius. 
+The _sphere element_ defines a sphere of a given radius at the position of vertex "vindex".
 
+If the attribute "r" is not given, the default "sphereradius" of the enclusing beamlattice MUST be used.
 
+Property values MUST be applied over the sphere as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions.
+
+In the unification process of the spheres, ambiguities of the corresponding surface properties are likely to occur. The resultion is described in 
 
 ### 1.2. Profiles
 
@@ -165,18 +172,53 @@ Element **\<profiles>**
 
 ![beams XML structure](images/profiles.png)
 
-A _beam lattice node_ can contains a _caps node_ that contains caps for vertices. This allows e.g. dumbbell shaped beams.
+A _beam lattice node_ can contain a _profiles node_ that contains non-circular profiles for beams.
 
-### 1.2.1 Cap
+The \<profiles> element acts as a container for profiles. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A profiles element MUST NOT contain more than 2^31-1 beams.
+
+### 1.2.1 Profile
 Element **\<profile>**
 
 ![beams XML structure](images/profile.png)
 
-A _profile element_ defines a 2D profile of a beam that is exstruded along the axis of a beam. The radius of this profile is defined by the local radius of the beam along its length.
+A _profile element_ defines a 2D profile of a beam that is extruded along the axis of a beam.
 
-The rotation of a beam profile around the beams axis (v) is such that the beam's up vector conincides with profiles first-vector in object coordinate space (where it is given by (t1,t2,v) ).
+A beam profile is defined by a 2D polygon encoded by a list of _vertex nodes_
+that describe a polygon.
 
-### 1.1.1. Beams
+This polygon MUST be star-shaped around (0,0) and all it's vertices must be contained in the unit sphere, i.e. the magnitude of each vertex v = (x,y) must not be larger than 1:
+
+x^2 + y^2 \<=2
+
+##### Figure 2-3: Example images of star-shaped and non-starshaped geometry
+
+| | | |
+| - | - | - |
+|![Clipping setup](images/clipping_setup.png)|![Clipping setup](images/clipping_setup.png)|![Clipping setup](images/clipping_setup.png)|
+| Starshaped geometry with two star points | non starshaped geometry | every convex object is starshaped|
+
+During extrusion along the length of a conical beam, the (x,y)-coordinates of this profile are scaled by the local radius of the beam at its current length.
+
+
+
+### 1.2.2 Vertex
+
+Element **\<vertex>**
+
+![element <vertex>](images/element_vertex.png)
+
+##### Attributes
+
+| Name | Type | Use | Default | Annotation |
+| --- | --- | --- | --- | --- |
+| x | **ST\_Number** | required | | The position of the vertex along the X axis. |
+| y | **ST\_Number** | required | | The position of the vertex along the Y axis. |
+
+A \<vertex> element represents a point in 2-dimensional space that builds up a polygon in a profile. The decimal values representing the coordinates can be recorded to arbitrary precision. The precision used should be no higher than that expected from the producer's calculations.
+
+In order to avoid integer overflows, a \<profile> element MUST contain less than 2^31 \<vertex> elements.
+
+### 1.3.1. Beams
 
 Element **\<beams>**
 
@@ -184,16 +226,19 @@ Element **\<beams>**
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
-| upx   | **ST\_Number** | optional |    | x-component of default up vector. If upx is specicied, upy and upz must be specified. |
-| upy   | **ST\_Number** | optional |    | y-component of default up vector. If upy is specicied upz must be specified. |
+| upx   | **ST\_Number** | optional |    | x-component of default up vector. |
+| upy   | **ST\_Number** | optional |    | y-component of default up vector. |
 | upz   | **ST\_Number** | optional |    | z-component of default up vector. |
-| minUpAngle   | **ST\_Number** | optional |    | if any cross-product of beam-directional vector and (upx, upy, upz) is smaller than minUpAngle, the choice of up-vector is up tp the consumer. |
+| minUpAngle   | **ST\_Number** | optional |    | Guaranteed minimal angle (degrees) between any beam and its up-vector. |
 
 A _beam lattice node_ contains a _beams node_ that contains all the beam data.
 
 A \<beams> element acts as a container for beams. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A beams element MUST NOT contain more than 2^31-1 beams.
 
-#### 1.1.1.1. Beam elements
+If any of the attributes "upx"-, "upy"-, "upz"-, and "minUpAngle"-attributes are defined, all of them MUST be defined.
+If any of the beam-elements defines a beamprofile, all "upx", "upy", "upz", and "minUpAngle" must be defined.
+
+#### 1.3.1.1. Beam elements
 
 Element **\<beam>**
 
@@ -211,11 +256,25 @@ Element **\<beam>**
 | cap1   | **ST\_CapMode** | optional |   | Capping mode for the end of the beam (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape.<br/>If no cap is given, defaults to the beamlattice cap mode. |
 | cap2 | **ST\_CapMode** | optional |   | Capping mode for the end of the beam (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape.<br/>If no cap is given, defaults to the beamlattice cap mode. |
 | profileIndex   | **ST\_ResourceIndex** | optional |    | Index of the profile to be used for this beam. |
-| upx   | **ST\_Number** | optional |    | The x-component of the beam's up vector. If profileIndex is defined, upx must be defined. |
-| upy   | **ST\_Number** | optional |    | The y-component of the beam's up vector. If profileIndex is defined, upx must be defined. |
-| upz   | **ST\_Number** | optional |    | The y-component of the beam's up vector. If profileIndex is defined, upx must be defined. |
+| upx   | **ST\_Number** | optional |    | The x-component of the beam's up vector. |
+| upy   | **ST\_Number** | optional |    | The y-component of the beam's up vector. |
+| upz   | **ST\_Number** | optional |    | The z-component of the beam's up vector. |
 
-If no up-vector is specified, the default up-vector of the beamlattice is used.
+If any of the attributes "upx"-, "upy"- and "upz"-attributes are defined, all of them MUST be defined.
+If no up-vector is specified, the default up-vector **u'**=(upx, upy, upz) of the beamlattice is used.
+
+A producer MUST not ensure that no beam forms an angle with its up-vector smaller than the "minUpAngle"-attribute of the _beamlattice_ node. The angle is calculated in the following way:
+
+angle =  (180 / pi)* arccos(**b** * **u**)
+
+where
+
+- **b**=**u'**/||**u'**|| is the beams axial direction that is calculated by normalizing the axial beam vector **b'**=**v2**-**v1**. Here, **v1** and **v2** are the coordinates of the vertex with index v1 and v2, respectively.
+- **u**=**u'**/||**u'**|| is the up-direction and
+
+
+
+>**Note:** minUpAngle should be chosen by the producer such that... .
 
 If the end of a beam is a vertex with a defined cap, this cap takes precedence.
 
@@ -225,10 +284,40 @@ Lattice beams are attached to standard vertex elements of the mesh object. This 
 
 A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate frame).
 
+The beam radii can be given by a variety of combinations. These MUST be interpreted in the following order:
+
+- If both radii are given, they determine the geometry.
+- If only r1 is given, the beam will be cylindrical with radius r1.
+- If no radius is given, the beam will be cylindrical with the radius defined in the beamlattice.
+
+#### 1.3.1.1.1. Evaluation of beam geometry: beam body
+If a "beamprofile" is defined on a beam, the beam geometry is given by a the frustum of the polygon of its profile.. Otherwise, the beam geometry is given by a conical frustum. In each case, the radial extent is defined by the beam radii at the ends of the beam.
+
+The conical frustum case is straightforward:
+##### Figure 3-1: Beam geometry for a beam with spherical profile
 | ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
 | --- | --- |
 
-The beam geometry is given by a conical frustum, while the beam's end geometry is given by the capmode.
+To evaluate the geometry of a beam with specified beamprofile, the following rules apply:
+
+##### Figure 3-2: Beam geometry for beam with polygonal profile
+| ![coordinate system](images/coordinate_system.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
+| --- | --- |
+
+- **p'** is the projection of **u** onto the plane orthogonal to the beams axis.
+- **p** = **p'**/||**p'**|| is the normalized projection.
+- **v** = **p** x **b'** is the cross product of the projected up-vector **p** and **b**.
+
+The unit vectors **p**, **v** and **b** form a cartesian coordinate system with **p** and **v** spanning the plane orthogonal to the beams axis.
+
+The polygon of the specified beamprofile is evaluated on this plane where **p** takes the role of the x-axis and **v** takes the role of the y-axis, respecitively.
+
+Scaling the vertices of the polygon with the radius of the beam at any point along the length of the beam fully determines the beams geometry.
+
+
+
+#### 1.3.1.1.3. Evaluation of beam geometry: beam ends
+The beam's end geometry is always given by the capmode.
 
 - If the capmode is "butt", the frustum is kept with flat ends.
 - If the capmode is "sphere", the frustum is capped with spheres of specified radii.
@@ -240,19 +329,21 @@ The beam geometry is given by a conical frustum, while the beam's end geometry i
 
 A beam MAY combine two different capmodes on either vertex.
 
->**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
+>**Note** : In case of cylinders (i.e. circular beam profile and both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
+
+
+
+if any cross-product of beam-directional vector and (upx, upy, upz) is smaller than minUpAngle, the choice of up-vector is up tp the consumer
+
+#### 1.3.1.1.3. Evaluation of beam geometry: unification
 
 The unification of all beam geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
 
 ![geometry unification](images/unification.png)
 
-The beam radii can be given by a variety of combinations. These MUST be interpreted in the following order:
+#### 1.3.1.1.3. Evaluation of beam geometry: properties
 
-- If both radii are given, they determine the geometry.
-- If only r1 is given, the beam will be cylindrical with radius r1.
-- If no radius is given, the beam will be cylindrical with the radius defined in the beamlattice.
-
-Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
+Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line.
 
 | ![properties applied to nodes](images/properties_1.png) | ![properties applied to line](images/properties_2.png) | ![properties applied to beam](images/properties_3.png)|
 | --- | --- | --- |
@@ -260,7 +351,17 @@ Property values MUST be applied over the line as they would be applied over the 
 
 >**Note:** Properties MUST be applied in the local coordinate system.
 
-### 1.1.2. Beamsets
+#### 1.3.1.2. Resolution of ambiguities of surface properties on elements within a beamlattice
+In the unification process of the spheres and beams, ambiguities of the corresponding surface properties are likely to occur.
+
+In the case that this unification process only involves spheres, the property of the last sphere in the beamlattice MUST be used, consistent with the core specification.
+In this unification process involves beams, the last beam in the beamlattice order MUST be used.
+
+#### 1.3.1.3. Extrusion of an oriented beam-profile
+The rotation of a beam profile around the beams axis (v) is such that the beam's up vector conincides with profiles first-vector in object coordinate space (where it is given by (t1,t2,v) ).
+
+
+### 1.3.2. Beamsets
 
 Element **\<beamsets>**
 
@@ -270,7 +371,7 @@ A _beam lattice node_ MAY contain a _beamsets node_ that contains information ho
 
 A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced by metadata.
 
-### 1.1.3. Beam Set-Elements
+### 1.3.3. Beam Set-Elements
 
 Element **\<beamset>**
 
@@ -283,7 +384,7 @@ Element **\<beamset>**
 
 A _beam set_ contains a reference list to a subset of beams to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
 
-#### 1.1.3.1. Beam Set References
+#### 1.3.3.1. Beam Set References
 
 Element **\<ref>**
 
@@ -485,4 +586,4 @@ BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02
 
 See [the 3MF Core Specification references](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#references).
 
-Copyright 3MF Consortium 2018.
+Copyright 3MF Consortium 2019.
