@@ -12,7 +12,7 @@
 
 
 
-| **Version** | 1.0.3 |
+| **Version** | 1.0.4 |
 | --- | --- |
 | **Status** | Published |
 
@@ -55,6 +55,8 @@ This extension MUST be used only with Core specification 1.x.
 ## Document Conventions
 
 See [the 3MF Core Specification conventions](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#document-conventions).
+
+In this extension specification, as an example, the prefix "b" maps to the xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02". See [Appendix C. Standard Namespace](#appendix-c-standard-namespace).
 
 ## Language Notes
 
@@ -256,7 +258,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace"targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
+<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
   <xs:annotation>
     <xs:documentation>
       <![CDATA[
@@ -342,7 +344,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>
       <xs:enumeration value="inside"/>
-      <xs:enumeration value="outisde"/>
+      <xs:enumeration value="outside"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ST_CapMode">
