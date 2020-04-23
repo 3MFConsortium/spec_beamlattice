@@ -12,9 +12,9 @@
 
 
 
-| **Version** | 1.0.4 |
+| **Version** | 1.1.0 |
 | --- | --- |
-| **Status** | Published |
+| **Status** | Draft |
 
 ## Disclaimer
 
