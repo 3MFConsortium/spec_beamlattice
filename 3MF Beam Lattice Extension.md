@@ -116,6 +116,8 @@ Element **\<beamlattice>**
 | --- | --- | --- | --- | --- |
 | minlength | **ST\_PositiveNumber** | required |   | A producer MUST specify the minimal length of all beams in the lattice. The producer MUST NOT produce zero length beams (i.e. shorter than minlength). The consumer MUST ignore all beams with length shorter than minlength. |
 | radius   | **ST\_PositiveNumber** | required |   | Default uniform radius value for the beams. |
+| ballmode | **ST\_BallMode** | optional | none | Specifies whether balls are created at beam vertices. Possible values are:<br/>- **none** : No balls are created at beam vertices. <br/>- **mixed** : balls are created at vertices with a corresponding \<ball> element.  Other vertices do not get a ball. <br/>- **all** : balls are created at every vertex, using either ballradius or what is specified in a corresponding \<ball> element for that vertex, if present. |
+| ballradius   | **ST\_PositiveNumber** | optional |   | Default uniform radius value for the balls. Required if ballmode is different to "none". |
 | clippingmode | **ST\_ClippingMode** | optional | none | Specifies the clipping mode of the beam lattice. Possible values are:<br/>- **none** : The lattice is not clipped at any mesh boundary.<br/>- **inside** : The lattice is clipped by the volume described by the referenced clippingmesh. All geometry inside the volume (according to the positive fill rule) is retained.<br/>- **outside** : The lattice is clipped by the volume described by the referenced clippingmesh. All geometry outside the volume (according to the positive fill rule) is retained.<br/>If clipping mode is not equal to "none", a clippingmesh resource MUST be specified. |
 | clippingmesh   | **ST\_ResourceID** | optional   |   | Required, if clippingmode is different to "none". The clippingmesh attribute MUST reference an object id earlier in the file. The object MUST be a mesh object of type "model" (i.e. not a components object), and MUST NOT contain a beamlattice. The clippingmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). |
 | representationmesh | **ST\_ResourceID** | optional  |   | References a mesh object that represents the intentional shape of the lattice geometry. It is up to the producer to decide the appropriate level of fidelity of the geometry. The consumer MAY use this for display and preview purposes and MUST NOT use it for manufacturing the part.<br>The object MUST be a mesh object of type "model" (i.e. not a components object). The representationmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). The representationmesh attribute MUST reference an object id earlier in the file. |
@@ -175,7 +177,7 @@ A beam element represents a single beam of the beamlattice. A beam follows a lin
 | ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
 | --- | --- |
 
-The beam geometry is given by a conical frustum, while the beam's end geometry is given by the capmode.
+The beam geometry is given by a conical frustum. If a ball is defined at the end vertex, the beam's end geometry is given by the union of the ball and the cap geometry, as defined by the capmode.
 
 - If the capmode is "butt", the frustum is kept with flat ends.
 - If the capmode is "sphere", the frustum is capped with spheres of specified radii.
@@ -206,6 +208,37 @@ Property values MUST be applied over the line as they would be applied over the 
 | _Properties applied to nodes_ | _Properties applied to line_ | _Properties extended to beam surface_ |
 
 >**Note:** Properties MUST be applied in the local coordinate system.
+
+### 2.1.2. Balls
+Element **\<balls>**
+
+![beams XML structure](images/spheres.png)
+
+A _beam lattice node_ can contain a _balls node_ that contains spheres around vertices at beam ends. This allows, for example, dumbbell shaped beams and rod and ball lattices.
+
+A \<balls> element acts as a container for balls. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A balls element MUST NOT contain more than 2^31-1 balls.
+
+### 2.1.2.1 Ball
+Element **\<ball>**
+
+![beams XML structure](images/sphere.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| vindex   | **ST\_ResourceIndex** | required |    | The ResourceIndex of the vertex that serves as center for this ball |
+| r   | **ST\_PositiveNumber** | optional |    | The radius of this ball |
+| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
+| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
+
+The _ball element_ defines a sphere of a given radius centered at the position of the vertex defined by "vindex".
+
+If the attribute "r" is not given, the default "ballradius" of the enclosing beamlattice MUST be used as the radius of the ball. 
+
+![beam and ball unification](images/ballandbeam3.png)
+
+Property values MUST be applied over the sphere as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions.
+
+In the unification process of the beams and balls, ambiguities of the corresponding surface properties are likely to occur. In the case that the unification process contains only balls and there are ambiguities, the property of the last ball in the beam lattice MUST be used, consistent with the core specification. If the unification process involved beams and there are ambiguities, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
 
 ### 1.1.2. Beamsets
 
@@ -283,11 +316,14 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <xs:complexType name="CT_BeamLattice">
     <xs:sequence>
        <xs:element ref="beams"/>
+       <xs:element ref="balls" minOccurs="0" maxOccurs="1"/>
        <xs:element ref="beamsets" minOccurs="0" maxOccurs="1"/>
        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="minlength" type="ST_PositiveNumber" use="required"/>
     <xs:attribute name="radius" type="ST_PositiveNumber" use="required"/>
+    <xs:attribute name="ballmode" type="ST_BallMode" default="none"/>
+    <xs:attribute name="ballradius" type="ST_PositiveNumber"/>
     <xs:attribute name="clippingmode" type="ST_ClippingMode" default="none"/>
     <xs:attribute name="clippingmesh" type="ST_ResourceID" />
     <xs:attribute name="representationmesh" type="ST_ResourceID" />
@@ -317,6 +353,22 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
         <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
       </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="CT_Ball">
+     <xs:sequence>
+       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+     </xs:sequence>
+    <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
+    <xs:attribute name="r" type="ST_PositiveNumber" />
+    <xs:attribute name="p" type="ST_ResourceIndex" />
+    <xs:attribute name="pid" type="ST_ResourceID" />
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_Balls">
+      <xs:sequence>
+        <xs:element ref="ball" minOccurs="0" maxOccurs="2147483647"/>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+      </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
@@ -340,6 +392,13 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
   <!-- Simple Types -->
+  <xs:simpleType name="ST_BallMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="mixed"/>
+      <xs:enumeration value="all"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="ST_ClippingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>
@@ -373,6 +432,8 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <!-- Elements -->
   <xs:element name="beam" type="CT_Beam"/>
   <xs:element name="beams" type="CT_Beams"/>
+  <xs:element name="ball" type="CT_Ball"/>
+  <xs:element name="balls" type="CT_Balls"/>
   <xs:element name="ref" type="CT_Ref"/>
   <xs:element name="beamset" type="CT_BeamSet"/>
   <xs:element name="beamsets" type="CT_BeamSets"/>
