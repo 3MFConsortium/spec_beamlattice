@@ -30,7 +30,7 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 - [Part I: 3MF Documents](#part-i-3mf-documents)
 - [Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
 - [Chapter 2. Object](#chapter-2-object)
-  * [1.1. Beamlattice](#11-beamlattice)
+  * [2.1. Beamlattice](#11-beamlattice)
 - [Part II. Appendixes](#part-ii-appendixes)
   * [Appendix A. Glossary](#appendix-a-glossary)
   * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
@@ -105,7 +105,7 @@ This implies that the geometric surface of the lattice MUST be transformed as th
 
 >**Note:** The corresponding rules for mirroring are applied implicitly.
 
-## 1.1. Beamlattice
+## 2.1. Beamlattice
 
 Element **\<beamlattice>**
 
@@ -127,7 +127,7 @@ Element **\<beamlattice>**
 
 A _beam lattice node_ provides information about _lattice_ data, in the form of a simplistic node-beam model as part of the mesh.
 
-A \<beamlattice> element acts as a container for beams and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
+A \<beamlattice> element acts as a container for beams, balls and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
 
 ##### Figure 2-2: Example images of clipping modes of a lattice against a sphere mesh
 
@@ -140,7 +140,7 @@ The lattice is to be clipped against a spherical clippingmesh.
 | :---: | :---: | :---: |
 | Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
 
-### 1.1.1. Beams
+### 2.1.1. Beams
 
 Element **\<beams>**
 
@@ -150,7 +150,7 @@ A _beam lattice node_ contains a _beams node_ that contains all the beam data.
 
 A \<beams> element acts as a container for beams. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A beams element MUST NOT contain more than 2^31-1 beams.
 
-#### 1.1.1.1. Beam elements
+#### 2.1.1.1. Beam elements
 
 Element **\<beam>**
 
@@ -216,7 +216,7 @@ Element **\<balls>**
 
 A _beam lattice node_ can contain a _balls node_ that contains spheres around vertices at beam ends. This allows, for example, dumbbell shaped beams and rod and ball lattices.
 
-A \<balls> element acts as a container for balls. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A balls element MUST NOT contain more than 2^31-1 balls.
+A \<balls> element acts as a container for ball elements. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A balls element MUST NOT contain more than 2^31-1 balls.
 
 ### 2.1.2.1 Ball
 Element **\<ball>**
@@ -240,7 +240,7 @@ Property values MUST be applied over the sphere as they would be applied over th
 
 In the unification process of the beams and balls, ambiguities of the corresponding surface properties are likely to occur. In the case that the unification process contains only balls and there are ambiguities, the property of the last ball in the beam lattice MUST be used, consistent with the core specification. If the unification process involved beams and there are ambiguities, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
 
-### 1.1.2. Beamsets
+### 2.1.3. Beamsets
 
 Element **\<beamsets>**
 
@@ -250,7 +250,7 @@ A _beam lattice node_ MAY contain a _beamsets node_ that contains information ho
 
 A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced by metadata.
 
-### 1.1.3. Beam Set-Elements
+### 2.1.4. Beam Set-Elements
 
 Element **\<beamset>**
 
@@ -261,9 +261,13 @@ Element **\<beamset>**
 | name   | **ST\_String**   | optional   |   | Human-readable name of the beam collection |
 | identifier | **ST\_String** | optional |   | Might be used for external identification of the beam collection data. Does not need to be unique. |
 
-A _beam set_ contains a reference list to a subset of beams to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
+A _beam set_ contains a reference list to a subset of beams and a reference list to a subset of balls to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
 
-#### 1.1.3.1. Beam Set References
+A beamset is a collection of references to beams and balls. Since beamsets do not have a specific influence on the geometrical shape, a consumer MAY ignore the information.
+
+A consumer MUST ignore duplicate references to the same beam or ball in one set. A producer SHOULD avoid creating duplicate references to the same beam or ball in one set.
+
+#### 2.1.4.1. Beam Set References
 
 Element **\<ref>**
 
@@ -275,10 +279,18 @@ Element **\<ref>**
 
 A \<ref> element in a beam set refers to the zero-based indexed \<beam> elements that are contained in the _beamlattice node._
 
-A beamset is a collection of references to beams. Since beamsets do not have a specific influence on the geometrical shape, a consumer MAY ignore the information.
 
-A consumer MUST ignore duplicate references to the same beam in one set. A producer SHOULD avoid creating duplicate references to the same beam in one set.
+#### 2.1.4.2. Ball References
 
+Element **\<ballref>**
+
+![ref](images/ref.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| index   | **ST\_ResourceIndex**   | required   |   | References an index in the beamlattice ball list. |
+
+A \<ballref> element in a beam set refers to the zero-based indexed \<ball> elements that are contained in the _beamlattice node._
 
 
 # Part II. Appendixes
@@ -374,6 +386,10 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
+    <xs:sequence>
+      <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
+    </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="identifier" type="xs:string"/>
     <xs:anyAttribute namespace="##other" processContents="lax"/>
@@ -385,6 +401,13 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="CT_Ref">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+   <xs:complexType name="CT_BallRef">
     <xs:sequence>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
     </xs:sequence>
@@ -435,6 +458,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <xs:element name="ball" type="CT_Ball"/>
   <xs:element name="balls" type="CT_Balls"/>
   <xs:element name="ref" type="CT_Ref"/>
+  <xs:element name="ballref" type="CT_BallRef"/>
   <xs:element name="beamset" type="CT_BeamSet"/>
   <xs:element name="beamsets" type="CT_BeamSets"/>
   <xs:element name="beamlattice" type="CT_BeamLattice"/>
