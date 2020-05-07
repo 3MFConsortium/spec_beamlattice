@@ -191,7 +191,9 @@ A beam MAY combine two different capmodes on either vertex.
 
 >**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
 
-The unification of all beam geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
+The unification of all beam and ball geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. To guarentee this, all beams MUST be capped prior to the unification process.
+
+Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
 
 ![geometry unification](images/unification.png)
 
@@ -216,7 +218,7 @@ Element **\<balls>**
 
 A _beam lattice node_ can contain a _balls node_ that contains spheres around vertices at beam ends. This allows, for example, dumbbell shaped beams and rod and ball lattices.
 
-A \<balls> element acts as a container for ball elements. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A balls element MUST NOT contain more than 2^31-1 balls.
+A \<balls> element acts as a container for ball elements. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A balls element MUST contain at least one ball element and MUST NOT contain more than 2^31-1 ball elements.
 
 ### 2.1.2.1 Ball
 Element **\<ball>**
@@ -225,8 +227,8 @@ Element **\<ball>**
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
-| vindex   | **ST\_ResourceIndex** | required |    | The ResourceIndex of the vertex that serves as center for this ball |
-| r   | **ST\_PositiveNumber** | optional |    | The radius of this ball |
+| vindex   | **ST\_ResourceIndex** | required |    | References a zero-based index into the vertices of this mesh. Defines the vertex that serves as the center for this ball. |
+| r   | **ST\_PositiveNumber** | optional |    | The radius of this ball. |
 | p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
 | pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
 
@@ -377,7 +379,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   </xs:complexType>
   <xs:complexType name="CT_Balls">
       <xs:sequence>
-        <xs:element ref="ball" minOccurs="0" maxOccurs="2147483647"/>
+        <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
         <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
       </xs:sequence>
   </xs:complexType>
