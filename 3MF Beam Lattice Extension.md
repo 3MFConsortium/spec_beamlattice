@@ -214,7 +214,7 @@ Property values MUST be applied over the line as they would be applied over the 
 ### 2.1.2. Balls
 Element **\<balls>**
 
-![beams XML structure](images/spheres.png)
+![balls XML structure](images/balls.png)
 
 A _beam lattice node_ can contain a _balls node_ that contains spheres around vertices at beam ends. This allows, for example, dumbbell shaped beams and rod and ball lattices.
 
@@ -286,7 +286,7 @@ A \<ref> element in a beam set refers to the zero-based indexed \<beam> elements
 
 Element **\<ballref>**
 
-![ref](images/ref.png)
+![ballref](images/ballref.png)
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
