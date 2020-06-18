@@ -223,7 +223,7 @@ A \<balls> element acts as a container for ball elements. The order of these ele
 ### 2.1.2.1 Ball
 Element **\<ball>**
 
-![beams XML structure](images/sphere.png)
+![ball XML structure](images/ball.png)
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
