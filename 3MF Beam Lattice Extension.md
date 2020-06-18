@@ -232,7 +232,7 @@ Element **\<ball>**
 | p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
 | pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
 
-The _ball element_ defines a sphere of a given radius centered at the position of the vertex defined by "vindex".
+The _ball element_ defines a sphere of a given radius centered at the position of the vertex defined by "vindex".  The vertex defined by "vindex" MUST be the end vertex of at least one beam.
 
 If the attribute "r" is not given, the default "ballradius" of the enclosing beamlattice MUST be used as the radius of the ball. 
 
