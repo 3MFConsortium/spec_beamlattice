@@ -23,7 +23,7 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 ## Table of Contents
 
 - [Preface](#preface)
-  * [1.1. About this Specification](#11-about-this-specification)
+  * [About this Specification](#11-about-this-specification)
   * [Document Conventions](#document-conventions)
   * [Language Notes](#language-notes)
   * [Software Conformance](#software-conformance)
@@ -40,7 +40,7 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 
 # Preface
 
-## 1.1. About this Specification
+## About this Specification
 
 This 3MF beam lattice specification is an extension to the core 3MF specification. This document cannot stand alone and only applies as an addendum to the core 3MF specification. Usage of this and any other 3MF extensions follow an a la carte model, defined in the core 3MF specification.
 
@@ -82,7 +82,7 @@ While this is meant to be an exact specification of the lattice geometry, and co
 
 A producer using the lattice specification MUST mark the extension as required, as described in the core specification.
 
-##### Figure 2-1: Overview of model XML structure of 3MF with beam lattice additions
+##### Figure 1-1: Overview of model XML structure of 3MF with beam lattice additions
 
 #####
 ![Overview of model XML structure of 3MF with beam lattice additions](images/figure_2-1.png)
@@ -129,7 +129,7 @@ A _beam lattice node_ provides information about _lattice_ data, in the form of 
 
 A \<beamlattice> element acts as a container for beams, balls and beam sets. The lattice MAY be geometrically clipped against a reference mesh as defined by the clippingmode and clippingmesh attributes. The clipping mode determines which parts of the lattice define the final geometry. Consumers MUST clip the beam lattice when a clippingmesh is provided and the clippingmode is not equal to "none".
 
-##### Figure 2-2: Example images of clipping modes of a lattice against a sphere mesh
+##### Figure 2-1: Example images of clipping modes of a lattice against a sphere mesh
 
 
 ![Clipping setup](images/clipping_setup.png)
