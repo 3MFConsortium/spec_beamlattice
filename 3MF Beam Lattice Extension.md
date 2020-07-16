@@ -95,7 +95,7 @@ Element **\<mesh>**
 
 This 3MF extension specification defines a new \<beamlattice> element that lives as child of the \<mesh> element from the core 3MF specification, as the lattice structures are intended to be subject to the same coordinate system as the underlying mesh.  A beamlattice MUST only be added to a mesh object of type "model" or "solidsupport".
 
-The positive fill rule (as defined in the Core Specification) MUST be applied to the triangle mesh geometry and lattice geometry separately and independently. Then the triangle mesh geometry MUST be unified with the lattice geometry according to the positive fill rule (for the triangles). In case of an overlap, the properties of the triangle mesh geometry MUST prevail in the overlapping region.
+The positive fill rule (as defined in the Core Specification) MUST first be applied to the triangle mesh geometry and lattice geometry separately and independently. Then the triangle mesh geometry MUST be unified with the lattice geometry according to the positive fill rule (for the triangles). In case of an overlap, the properties of the triangle mesh geometry MUST prevail in the overlapping region.
 
 If a beamlattice is added to a mesh object, the mesh MAY consist of no triangles. This allows the representation of lattice-only objects.
 
