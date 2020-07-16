@@ -248,7 +248,7 @@ Element **\<beamsets>**
 
 A _beam lattice node_ MAY contain a _beamsets node_ that contains information how beams are grouped and organized.
 
-A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced by metadata.
+A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced externally by their identifier.
 
 ### 2.1.4. Beam Set-Elements
 
@@ -259,7 +259,7 @@ Element **\<beamset>**
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
 | name   | **ST\_String**   | optional   |   | Human-readable name of the beam collection |
-| identifier | **ST\_String** | optional |   | Might be used for external identification of the beam collection data. Does not need to be unique. |
+| identifier | **ST\_String** | optional |   | Might be used for external identification of the beam collection data. The identifier attribute MUST be unique within the beam lattice. |
 
 A _beam set_ contains a reference list to a subset of beams and a reference list to a subset of balls to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
 
