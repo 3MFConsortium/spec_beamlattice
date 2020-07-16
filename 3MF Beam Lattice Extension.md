@@ -125,7 +125,7 @@ Element **\<beamlattice>**
 
 A _beam lattice node_ provides information about _lattice_ data, in the form of a simplistic node-beam model as part of the mesh.
 
-A \<beamlattice> element acts as a container for beams, balls and beam sets. The lattice MAY be geometrically clipped against a reference mesh as defined by the clippingmode and clippingmesh attributes. The clipping mode determines which parts of the lattice define the final geometry. Consumers MUST clip the beam lattice when a clippingmesh is provided and the clippingmode is not equal to "none".
+A \<beamlattice> element acts as a container for beams, balls and beam sets. The lattice MAY be geometrically clipped against a reference mesh as defined by the clippingmode and clippingmesh attributes. The clipping mode determines which parts of the lattice define the final geometry. Consumers MUST clip the beam lattice when a clippingmesh is provided and the clippingmode is not equal to "none".  The clipped surfaces of the lattice MUST inherit any properties (for example, color) from the clippingmesh.
 
 ##### Figure 2-1: Example images of clipping modes of a lattice against a sphere mesh
 
