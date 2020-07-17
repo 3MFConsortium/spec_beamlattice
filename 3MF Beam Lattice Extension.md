@@ -203,13 +203,15 @@ The beam radii can be given by a variety of combinations. These MUST be interpre
 - If only r1 is given, the beam will be cylindrical with radius r1.
 - If no radius is given, the beam will be cylindrical with the radius defined in the beamlattice.
 
-Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
+Property values MUST be applied over the axial line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
 
 | ![properties applied to nodes](images/properties_1.png) | ![properties applied to line](images/properties_2.png) | ![properties applied to beam](images/properties_3.png)|
 | --- | --- | --- |
 | _Properties applied to nodes_ | _Properties applied to line_ | _Properties extended to beam surface_ |
 
 >**Note:** Properties MUST be applied in the local coordinate system.
+
+>**Note:** Properties defined on a beam that are from a display properties group MUST NOT form gradients, as interpolation between physically based materials is not defined in the core specification. A consumer MUST apply the p1 property to the entire beam. Property p2 MUST be either unspecified or MUST be equal to p1.
 
 ### 2.1.2. Balls
 Element **\<balls>**
