@@ -114,7 +114,7 @@ Element **\<beamlattice>**
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
-| minlength | **ST\_PositiveNumber** | required |   | A producer MUST specify the minimal length of all beams in the lattice. The producer MUST NOT produce zero length beams (i.e. shorter than minlength). The consumer MUST ignore all beams with length shorter than minlength. |
+| minlength | **ST\_PositiveNumber** | required |   | A producer MUST specify the minimal length of all beams in the lattice. The producer SHOULD NOT produce zero length beams (i.e. shorter than minlength). The consumer MUST ignore all beams with length shorter than minlength. |
 | radius   | **ST\_PositiveNumber** | required |   | Default uniform radius value for the beams. |
 | ballmode | **ST\_BallMode** | optional | none | Specifies whether balls are created at beam vertices. Possible values are:<br/>- **none** : No balls are created at beam vertices. <br/>- **mixed** : balls are created at vertices with a corresponding \<ball> element.  Other vertices do not get a ball. <br/>- **all** : balls are created at every vertex, using either ballradius or what is specified in a corresponding \<ball> element for that vertex, if present. |
 | ballradius   | **ST\_PositiveNumber** | optional |   | Default uniform radius value for the balls. Required if ballmode is different to "none". |
@@ -172,7 +172,7 @@ Lattice beams are attached to standard vertex elements of the mesh object. This 
 
 >**Note:** This might lead to vertex elements in the 3MF that are not part of the mesh surface.
 
-A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate frame).
+A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate system, before applying any transform).
 
 | ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
 | --- | --- |
@@ -209,7 +209,7 @@ Property values MUST be applied over the line as they would be applied over the 
 | --- | --- | --- |
 | _Properties applied to nodes_ | _Properties applied to line_ | _Properties extended to beam surface_ |
 
->**Note:** Properties MUST be applied in the local coordinate system.
+>**Note:** Properties MUST be applied in the local coordinate system, before applying any transform.
 
 ### 2.1.2. Balls
 Element **\<balls>**
