@@ -172,7 +172,7 @@ Lattice beams are attached to standard vertex elements of the mesh object. This 
 
 >**Note:** This might lead to vertex elements in the 3MF that are not part of the mesh surface.
 
-A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate system, before applying any transform).
+A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and SHOULD have a minimum distance of the lattice's minlength (in the local coordinate system, before applying any transform).
 
 | ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
 | --- | --- |
