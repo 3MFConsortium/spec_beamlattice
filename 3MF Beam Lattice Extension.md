@@ -12,7 +12,7 @@
 
 
 
-| **Version** | 1.0.4 |
+| **Version** | 1.1.0 |
 | --- | --- |
 | **Status** | Published |
 
@@ -23,14 +23,14 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 ## Table of Contents
 
 - [Preface](#preface)
-  * [1.1. About this Specification](#11-about-this-specification)
+  * [About this Specification](#11-about-this-specification)
   * [Document Conventions](#document-conventions)
   * [Language Notes](#language-notes)
   * [Software Conformance](#software-conformance)
 - [Part I: 3MF Documents](#part-i-3mf-documents)
 - [Chapter 1. Overview of Additions](#chapter-1-overview-of-additions)
 - [Chapter 2. Object](#chapter-2-object)
-  * [1.1. Beamlattice](#11-beamlattice)
+  * [2.1. Beamlattice](#11-beamlattice)
 - [Part II. Appendixes](#part-ii-appendixes)
   * [Appendix A. Glossary](#appendix-a-glossary)
   * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
@@ -40,7 +40,7 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 
 # Preface
 
-## 1.1. About this Specification
+## About this Specification
 
 This 3MF beam lattice specification is an extension to the core 3MF specification. This document cannot stand alone and only applies as an addendum to the core 3MF specification. Usage of this and any other 3MF extensions follow an a la carte model, defined in the core 3MF specification.
 
@@ -82,7 +82,7 @@ While this is meant to be an exact specification of the lattice geometry, and co
 
 A producer using the lattice specification MUST mark the extension as required, as described in the core specification.
 
-##### Figure 2-1: Overview of model XML structure of 3MF with beam lattice additions
+##### Figure 1-1: Overview of model XML structure of 3MF with beam lattice additions
 
 #####
 ![Overview of model XML structure of 3MF with beam lattice additions](images/figure_2-1.png)
@@ -95,17 +95,15 @@ Element **\<mesh>**
 
 This 3MF extension specification defines a new \<beamlattice> element that lives as child of the \<mesh> element from the core 3MF specification, as the lattice structures are intended to be subject to the same coordinate system as the underlying mesh.  A beamlattice MUST only be added to a mesh object of type "model" or "solidsupport".
 
-The triangle mesh geometry MUST be unified with the lattice geometry according to the positive fill rule (for the triangles). In case of an overlap, the properties of the triangle mesh geometry MUST prevail in the overlapping region.
+The positive fill rule (as defined in the Core Specification) MUST first be applied to the triangle mesh geometry and lattice geometry separately and independently. Then the triangle mesh geometry MUST be unified with the lattice geometry according to the positive fill rule (for the triangles). In case of an overlap, the properties of the triangle mesh geometry MUST prevail in the overlapping region.
 
 If a beamlattice is added to a mesh object, the mesh MAY consist of no triangles. This allows the representation of lattice-only objects.
 
 >**Note:** This is relaxing the rules of the core specification, but is not a breaking change, as the beamlattice extension MUST always be a required extension.
 
-This implies that the geometric surface of the lattice MUST be transformed as the mesh itself, i.e. translated, rotated, scaled and sheared as defined in the build items and components of the core specification.
+This implies that the geometric surface of the lattice MUST be transformed as the mesh itself, i.e. translated, rotated, scaled, mirrored and sheared as defined in the build items and components of the core specification. Should the beam lattice contain a clipping mesh or a representation mesh then any transform applied to the lattice MUST also be applied to these meshes.
 
->**Note:** The corresponding rules for mirroring are applied implicitly.
-
-## 1.1. Beamlattice
+## 2.1. Beamlattice
 
 Element **\<beamlattice>**
 
@@ -114,20 +112,24 @@ Element **\<beamlattice>**
 
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
-| minlength | **ST\_PositiveNumber** | required |   | A producer MUST specify the minimal length of all beams in the lattice. The producer MUST NOT produce zero length beams (i.e. shorter than minlength). The consumer MUST ignore all beams with length shorter than minlength. |
+| minlength | **ST\_PositiveNumber** | required |   | A producer MUST specify the minimal length of all beams in the lattice. The producer SHOULD NOT produce zero length beams (i.e. shorter than minlength). The consumer MUST ignore all beams with length shorter than minlength. |
 | radius   | **ST\_PositiveNumber** | required |   | Default uniform radius value for the beams. |
+| ballmode | **ST\_BallMode** | optional | none | Specifies whether balls are created at beam vertices. Possible values are:<br/>- **none** : No balls are created at beam vertices. <br/>- **mixed** : balls are created at vertices with a corresponding \<ball> element.  Other vertices do not get a ball. <br/>- **all** : balls are created at every vertex that maps to the end of a beam, using either ballradius or what is specified in a corresponding \<ball> element for that vertex, if present. |
+| ballradius   | **ST\_PositiveNumber** | optional |   | Default uniform radius value for the balls. Required if ballmode is different to "none". |
 | clippingmode | **ST\_ClippingMode** | optional | none | Specifies the clipping mode of the beam lattice. Possible values are:<br/>- **none** : The lattice is not clipped at any mesh boundary.<br/>- **inside** : The lattice is clipped by the volume described by the referenced clippingmesh. All geometry inside the volume (according to the positive fill rule) is retained.<br/>- **outside** : The lattice is clipped by the volume described by the referenced clippingmesh. All geometry outside the volume (according to the positive fill rule) is retained.<br/>If clipping mode is not equal to "none", a clippingmesh resource MUST be specified. |
 | clippingmesh   | **ST\_ResourceID** | optional   |   | Required, if clippingmode is different to "none". The clippingmesh attribute MUST reference an object id earlier in the file. The object MUST be a mesh object of type "model" (i.e. not a components object), and MUST NOT contain a beamlattice. The clippingmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). |
-| representationmesh | **ST\_ResourceID** | optional  |   | References a mesh object that represents the intentional shape of the lattice geometry. It is up to the producer to decide the appropriate level of fidelity of the geometry. The consumer MAY use this for display and preview purposes and MUST NOT use it for manufacturing the part.<br>The object MUST be a mesh object of type "model" (i.e. not a components object). The representationmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). The representationmesh attribute MUST reference an object id earlier in the file. |
+| representationmesh | **ST\_ResourceID** | optional  |   | References a mesh object that represents the intentional shape of the lattice geometry. It is up to the producer to decide the appropriate level of fidelity of the geometry. The consumer MAY use this for display and preview purposes and MUST NOT use it for manufacturing the part.<br>The object MUST be a mesh object of type "model" (i.e. not a components object) and MUST NOT contain a beamlattice. The representationmesh id MUST NOT be a self-reference (i.e. the id references the object that contains the beam lattice). The representationmesh attribute MUST reference an object id earlier in the file. |
 | pid | **ST\_ResourceID** | optional |   | Overrides the object-level pid as default for all beams. |
 | pindex | **ST\_ResourceIndex** | optional |   | Overrides the object-level pindex as default for all beams. |
 | cap   | **ST\_CapMode** | optional | sphere   | Default capping mode for beam ends (see below). Possible values:<br/>- "hemisphere": the beam end will be closed at its end nodes by a half sphere.<br/>- "sphere": the beam end will be closed at its end nodes by a sphere.<br/>- "butt": the beam end will be closed with a flat end and therefore have a cylindrical or conical shape. |
 
 A _beam lattice node_ provides information about _lattice_ data, in the form of a simplistic node-beam model as part of the mesh.
 
-A \<beamlattice> element acts as a container for beams and beam sets. The lattice MAY be geometrically clipped against a reference mesh. The clipping mode determines which parts of the lattice define the final geometry.
+A \<beamlattice> element acts as a container for beams, balls and beam sets. The lattice MAY be geometrically clipped against a reference mesh as defined by the clippingmode and clippingmesh attributes. The clipping mode determines which parts of the lattice define the final geometry. Consumers MUST clip the beam lattice when a clippingmesh is provided and the clippingmode is not equal to "none".  The clipped surfaces of the lattice MUST inherit any properties (for example, color) from the clippingmesh.
 
-##### Figure 2-2: Example images of clipping modes of a lattice against a sphere mesh
+If this beam lattice contains any beam or ball with assigned properties, the beam lattice or object MUST specify pid and pindex, to act as default values for any beam or ball with unspecified properties.
+
+##### Figure 2-1: Example images of clipping modes of a lattice against a sphere mesh
 
 
 ![Clipping setup](images/clipping_setup.png)
@@ -138,7 +140,7 @@ The lattice is to be clipped against a spherical clippingmesh.
 | :---: | :---: | :---: |
 | Clippingmode "none" leaves the lattice unchanged. | Clippingmode "inside" constrains the lattice to the inside of the sphere.  | Clippingmode "outside" constrains the lattice to the outside of the sphere. |
 
-### 1.1.1. Beams
+### 2.1.1. Beams
 
 Element **\<beams>**
 
@@ -148,7 +150,7 @@ A _beam lattice node_ contains a _beams node_ that contains all the beam data.
 
 A \<beams> element acts as a container for beams. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A beams element MUST NOT contain more than 2^31-1 beams.
 
-#### 1.1.1.1. Beam elements
+#### 2.1.1.1. Beam elements
 
 Element **\<beam>**
 
@@ -170,12 +172,12 @@ Lattice beams are attached to standard vertex elements of the mesh object. This 
 
 >**Note:** This might lead to vertex elements in the 3MF that are not part of the mesh surface.
 
-A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and MUST have a minimum distance of the lattice's minlength (in the local coordinate frame).
+A beam element represents a single beam of the beamlattice. A beam follows a line with two attached radii at the ends, which are interpolated linearly over the line. A beam MUST consist of two distinct vertex indices, and SHOULD have a minimum distance of the lattice's minlength (in the local coordinate system, before applying any transform).
 
 | ![vertex radii](images/vertex_radii.png) | ![vertex radii interpolation](images/vertex_radii_interpolation.png) |
 | --- | --- |
 
-The beam geometry is given by a conical frustum, while the beam's end geometry is given by the capmode.
+The beam geometry is given by a conical frustum. If a ball is defined at the end vertex, the beam's end geometry is given by the union of the ball and the cap geometry, as defined by the capmode.
 
 - If the capmode is "butt", the frustum is kept with flat ends.
 - If the capmode is "sphere", the frustum is capped with spheres of specified radii.
@@ -189,7 +191,9 @@ A beam MAY combine two different capmodes on either vertex.
 
 >**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
 
-The unification of all beam geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
+The unification of all beam and ball geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. To guarentee this, all beams MUST be capped prior to the unification process.
+
+Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
 
 ![geometry unification](images/unification.png)
 
@@ -199,15 +203,48 @@ The beam radii can be given by a variety of combinations. These MUST be interpre
 - If only r1 is given, the beam will be cylindrical with radius r1.
 - If no radius is given, the beam will be cylindrical with the radius defined in the beamlattice.
 
-Property values MUST be applied over the line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
+Property values MUST be applied over the axial line as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions. The property values shall extend from the line to the surface of the beam geometry by applying the nearest neighbor on the line. In the unification process of the beams, ambiguities of the corresponding surface properties are likely to occur. In this case, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
 
 | ![properties applied to nodes](images/properties_1.png) | ![properties applied to line](images/properties_2.png) | ![properties applied to beam](images/properties_3.png)|
 | --- | --- | --- |
 | _Properties applied to nodes_ | _Properties applied to line_ | _Properties extended to beam surface_ |
 
->**Note:** Properties MUST be applied in the local coordinate system.
+>**Note:** Properties MUST be applied in the local coordinate system, before applying any transform.
 
-### 1.1.2. Beamsets
+>**Note:** Properties defined on a beam that are from a display properties group MUST NOT form gradients, as interpolation between physically based materials is not defined in the core specification. A consumer MUST apply the p1 property to the entire beam. Property p2 MUST be either unspecified or MUST be equal to p1.
+
+### 2.1.2. Balls
+Element **\<balls>**
+
+![balls XML structure](images/balls.png)
+
+A _beam lattice node_ can contain a _balls node_ that contains spheres around vertices at beam ends. This allows, for example, dumbbell shaped beams and rod and ball lattices.
+
+A \<balls> element acts as a container for ball elements. The order of these elements forms an implicit 0-based index that can be referenced by metadata. A balls element MUST contain at least one ball element and MUST NOT contain more than 2^31-1 ball elements.
+
+### 2.1.2.1 Ball
+Element **\<ball>**
+
+![ball XML structure](images/ball.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| vindex   | **ST\_ResourceIndex** | required |    | References a zero-based index into the vertices of this mesh. Defines the vertex that serves as the center for this ball. |
+| r   | **ST\_PositiveNumber** | optional |    | The radius of this ball. |
+| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
+| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
+
+The _ball element_ defines a sphere of a given radius centered at the position of the vertex defined by "vindex".  The vertex defined by "vindex" MUST be the end vertex of at least one beam.
+
+If the attribute "r" is not given, the default "ballradius" of the enclosing beamlattice MUST be used as the radius of the ball. 
+
+![beam and ball unification](images/ballandbeam3.png)
+
+Property values MUST be applied over the sphere as they would be applied over the triangles of the mesh. See the core specification and materials extension for details and restrictions.
+
+In the unification process of the beams and balls, ambiguities of the corresponding surface properties are likely to occur. In the case that the unification process contains only balls and there are ambiguities, the property of the last ball in the beam lattice MUST be used, consistent with the core specification. If the unification process involved beams and there are ambiguities, the property of the last beam in the beamlattice order MUST be used, consistent with the core specification.
+
+### 2.1.3. Beamsets
 
 Element **\<beamsets>**
 
@@ -215,9 +252,9 @@ Element **\<beamsets>**
 
 A _beam lattice node_ MAY contain a _beamsets node_ that contains information how beams are grouped and organized.
 
-A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced by metadata.
+A \<beamsets> element acts as a container for beamset nodes. The order of these elements forms an implicit 0-based index that MAY be referenced externally by their identifier.
 
-### 1.1.3. Beam Set-Elements
+### 2.1.4. Beam Set-Elements
 
 Element **\<beamset>**
 
@@ -226,11 +263,15 @@ Element **\<beamset>**
 | Name   | Type   | Use   | Default   | Annotation |
 | --- | --- | --- | --- | --- |
 | name   | **ST\_String**   | optional   |   | Human-readable name of the beam collection |
-| identifier | **ST\_String** | optional |   | Might be used for external identification of the beam collection data. Does not need to be unique. |
+| identifier | **ST\_String** | optional |   | Might be used for external identification of the beam collection data. The identifier attribute MUST be unique within the beam lattice. |
 
-A _beam set_ contains a reference list to a subset of beams to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
+A _beam set_ contains a reference list to a subset of beams and a reference list to a subset of balls to apply grouping operations and assign properties to a list of beams. Editing applications might use this information for internal purposes, for example color display and selection workflows.
 
-#### 1.1.3.1. Beam Set References
+A beamset is a collection of references to beams and balls. Since beamsets do not have a specific influence on the geometrical shape, a consumer MAY ignore the information.
+
+A consumer MUST ignore duplicate references to the same beam or ball in one set. A producer SHOULD avoid creating duplicate references to the same beam or ball in one set.
+
+#### 2.1.4.1. Beam Set References
 
 Element **\<ref>**
 
@@ -242,10 +283,18 @@ Element **\<ref>**
 
 A \<ref> element in a beam set refers to the zero-based indexed \<beam> elements that are contained in the _beamlattice node._
 
-A beamset is a collection of references to beams. Since beamsets do not have a specific influence on the geometrical shape, a consumer MAY ignore the information.
 
-A consumer MUST ignore duplicate references to the same beam in one set. A producer SHOULD avoid creating duplicate references to the same beam in one set.
+#### 2.1.4.2. Ball References
 
+Element **\<ballref>**
+
+![ballref](images/ballref.png)
+
+| Name   | Type   | Use   | Default   | Annotation |
+| --- | --- | --- | --- | --- |
+| index   | **ST\_ResourceIndex**   | required   |   | References an index in the beamlattice ball list. |
+
+A \<ballref> element in a beam set refers to the zero-based indexed \<ball> elements that are contained in the _beamlattice node._
 
 
 # Part II. Appendixes
@@ -283,11 +332,14 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <xs:complexType name="CT_BeamLattice">
     <xs:sequence>
        <xs:element ref="beams"/>
+       <xs:element ref="balls" minOccurs="0" maxOccurs="1"/>
        <xs:element ref="beamsets" minOccurs="0" maxOccurs="1"/>
        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="minlength" type="ST_PositiveNumber" use="required"/>
     <xs:attribute name="radius" type="ST_PositiveNumber" use="required"/>
+    <xs:attribute name="ballmode" type="ST_BallMode" default="none"/>
+    <xs:attribute name="ballradius" type="ST_PositiveNumber"/>
     <xs:attribute name="clippingmode" type="ST_ClippingMode" default="none"/>
     <xs:attribute name="clippingmesh" type="ST_ResourceID" />
     <xs:attribute name="representationmesh" type="ST_ResourceID" />
@@ -317,9 +369,29 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
         <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
       </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="CT_Ball">
+     <xs:sequence>
+       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+     </xs:sequence>
+    <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
+    <xs:attribute name="r" type="ST_PositiveNumber" />
+    <xs:attribute name="p" type="ST_ResourceIndex" />
+    <xs:attribute name="pid" type="ST_ResourceID" />
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_Balls">
+      <xs:sequence>
+        <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+      </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
+    </xs:sequence>
+    <xs:sequence>
+      <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
@@ -339,7 +411,21 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
+   <xs:complexType name="CT_BallRef">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
   <!-- Simple Types -->
+  <xs:simpleType name="ST_BallMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="mixed"/>
+      <xs:enumeration value="all"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="ST_ClippingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>
@@ -373,7 +459,10 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <!-- Elements -->
   <xs:element name="beam" type="CT_Beam"/>
   <xs:element name="beams" type="CT_Beams"/>
+  <xs:element name="ball" type="CT_Ball"/>
+  <xs:element name="balls" type="CT_Balls"/>
   <xs:element name="ref" type="CT_Ref"/>
+  <xs:element name="ballref" type="CT_BallRef"/>
   <xs:element name="beamset" type="CT_BeamSet"/>
   <xs:element name="beamsets" type="CT_BeamSets"/>
   <xs:element name="beamlattice" type="CT_BeamLattice"/>
