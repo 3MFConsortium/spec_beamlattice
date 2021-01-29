@@ -191,7 +191,7 @@ A beam MAY combine two different capmodes on either vertex.
 
 >**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
 
-The unification of all beam and ball geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. To guarentee this, all beams MUST be capped prior to the unification process.
+The unification of all beam and ball geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. To guarantee this, all beams MUST be capped prior to the unification process.
 
 Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
 
@@ -388,9 +388,6 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
-    </xs:sequence>
-    <xs:sequence>
       <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
