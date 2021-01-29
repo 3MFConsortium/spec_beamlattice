@@ -231,8 +231,8 @@ Element **\<ball>**
 | --- | --- | --- | --- | --- |
 | vindex   | **ST\_ResourceIndex** | required |    | References a zero-based index into the vertices of this mesh. Defines the vertex that serves as the center for this ball. |
 | r   | **ST\_PositiveNumber** | optional |    | The radius of this ball. |
-| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
-| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
+| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this ball. |
+| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this ball. |
 
 The _ball element_ defines a sphere of a given radius centered at the position of the vertex defined by "vindex".  The vertex defined by "vindex" MUST be the end vertex of at least one beam.
 
