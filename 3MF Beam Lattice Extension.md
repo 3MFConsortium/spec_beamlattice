@@ -34,7 +34,7 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 - [Part II. Appendixes](#part-ii-appendixes)
   * [Appendix A. Glossary](#appendix-a-glossary)
   * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
-  * [Appendix C. Standard Namespace](#appendix-c-standard-namespace)
+  * [Appendix C. Standard Namespaces](#appendix-c-standard-namespaces)
   * [Appendix D: Example file](#appendix-d-example-file)
 - [References](#references)
 
@@ -56,7 +56,7 @@ This extension MUST be used only with Core specification 1.x.
 
 See [the 3MF Core Specification conventions](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#document-conventions).
 
-In this extension specification, as an example, the prefix "b" maps to the xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02". See [Appendix C. Standard Namespace](#appendix-c-standard-namespace).
+In this extension specification, as an example, the prefix "b" maps to the xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" and  the prefix "b2" maps to the xml namespace  "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07". See [Appendix C. Standard Namespaces](#appendix-c-standard-namespaces).
 
 ## Language Notes
 
@@ -332,14 +332,11 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <xs:complexType name="CT_BeamLattice">
     <xs:sequence>
        <xs:element ref="beams"/>
-       <xs:element ref="balls" minOccurs="0" maxOccurs="1"/>
        <xs:element ref="beamsets" minOccurs="0" maxOccurs="1"/>
        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="minlength" type="ST_PositiveNumber" use="required"/>
     <xs:attribute name="radius" type="ST_PositiveNumber" use="required"/>
-    <xs:attribute name="ballmode" type="ST_BallMode" default="none"/>
-    <xs:attribute name="ballradius" type="ST_PositiveNumber"/>
     <xs:attribute name="clippingmode" type="ST_ClippingMode" default="none"/>
     <xs:attribute name="clippingmesh" type="ST_ResourceID" />
     <xs:attribute name="representationmesh" type="ST_ResourceID" />
@@ -369,26 +366,10 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
         <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
       </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="CT_Ball">
-     <xs:sequence>
-       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-     </xs:sequence>
-    <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
-    <xs:attribute name="r" type="ST_PositiveNumber" />
-    <xs:attribute name="p" type="ST_ResourceIndex" />
-    <xs:attribute name="pid" type="ST_ResourceID" />
-    <xs:anyAttribute namespace="##other" processContents="lax"/>
-  </xs:complexType>
-  <xs:complexType name="CT_Balls">
-      <xs:sequence>
-        <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
-        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-      </xs:sequence>
-  </xs:complexType>
+
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
-      <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
@@ -408,21 +389,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
-   <xs:complexType name="CT_BallRef">
-    <xs:sequence>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-    </xs:sequence>
-    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
-    <xs:anyAttribute namespace="##other" processContents="lax"/>
-  </xs:complexType>
   <!-- Simple Types -->
-  <xs:simpleType name="ST_BallMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="none"/>
-      <xs:enumeration value="mixed"/>
-      <xs:enumeration value="all"/>
-    </xs:restriction>
-  </xs:simpleType>
   <xs:simpleType name="ST_ClippingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>
@@ -456,20 +423,107 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <!-- Elements -->
   <xs:element name="beam" type="CT_Beam"/>
   <xs:element name="beams" type="CT_Beams"/>
-  <xs:element name="ball" type="CT_Ball"/>
-  <xs:element name="balls" type="CT_Balls"/>
   <xs:element name="ref" type="CT_Ref"/>
-  <xs:element name="ballref" type="CT_BallRef"/>
   <xs:element name="beamset" type="CT_BeamSet"/>
   <xs:element name="beamsets" type="CT_BeamSets"/>
   <xs:element name="beamlattice" type="CT_BeamLattice"/>
 </xs:schema>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07" elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
+  <xs:annotation>
+    <xs:documentation>
+      <![CDATA[
+    Schema notes:
+ 
+    Items within this schema follow a simple naming convention of appending a prefix indicating the type of element for references:
+ 
+    Unprefixed: Element names
+    CT_: Complex types
+    ST_: Simple types
+   
+    ]]>
+    </xs:documentation>
+  </xs:annotation>
+  <!-- Complex Types -->
+  <xs:complexType name="CT_BeamLattice">
+    <xs:sequence>
+       <xs:element ref="balls" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="ballmode" type="ST_BallMode" default="none"/>
+    <xs:attribute name="ballradius" type="ST_PositiveNumber"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_Ball">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
+    <xs:attribute name="r" type="ST_PositiveNumber" />
+    <xs:attribute name="p" type="ST_ResourceIndex" />
+    <xs:attribute name="pid" type="ST_ResourceID" />
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_Balls">
+    <xs:sequence>
+      <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CT_BallRef">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_BeamSet">
+    <xs:sequence>
+      <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>  
+  <!-- Simple Types -->
+  <xs:simpleType name="ST_BallMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="mixed"/>
+      <xs:enumeration value="all"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_ResourceID">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxExclusive value="2147483648"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_PositiveNumber">
+    <xs:restriction base="xs:double">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="((\+)?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))((e|E)(\-|\+)?[0-9]+)?)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_ResourceIndex">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxExclusive value="2147483648"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Elements -->  
+  <xs:element name="ball" type="CT_Ball"/>
+  <xs:element name="balls" type="CT_Balls"/>
+  <xs:element name="beamset" type="CT_BeamSet"/>
+  <xs:element name="ballref" type="CT_BallRef"/>
+  <xs:element name="beamlattice" type="CT_BeamLattice"/>
+  
+</xs:schema>
+
 ```
 
 
-## Appendix C. Standard Namespace
+## Appendix C. Standard Namespaces
 
 BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02](http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02)
+
+BeamLattice with balls [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07](http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07)
 
 ## Appendix D: Example file
 
