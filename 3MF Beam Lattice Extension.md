@@ -14,7 +14,7 @@
 
 | **Version** | 1.2.0 |
 | --- | --- |
-| **Status** | Published |
+| **Status** | Draft |
 
 ## Disclaimer
 
@@ -366,7 +366,6 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
         <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
       </xs:sequence>
   </xs:complexType>
-
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
@@ -455,9 +454,9 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
   <xs:complexType name="CT_Ball">
-    <xs:sequence>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-    </xs:sequence>
+     <xs:sequence>
+       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+     </xs:sequence>
     <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
     <xs:attribute name="r" type="ST_PositiveNumber" />
     <xs:attribute name="p" type="ST_ResourceIndex" />
@@ -465,10 +464,10 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
   <xs:complexType name="CT_Balls">
-    <xs:sequence>
-      <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-    </xs:sequence>
+      <xs:sequence>
+        <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+      </xs:sequence>
   </xs:complexType>
   <xs:complexType name="CT_BallRef">
     <xs:sequence>
@@ -479,10 +478,11 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   </xs:complexType>
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
-      <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
+      <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>	
     </xs:sequence>
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>  
+
   <!-- Simple Types -->
   <xs:simpleType name="ST_BallMode">
     <xs:restriction base="xs:string">
@@ -507,6 +507,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
       <xs:maxExclusive value="2147483648"/>
     </xs:restriction>
   </xs:simpleType>
+  
   <!-- Elements -->  
   <xs:element name="ball" type="CT_Ball"/>
   <xs:element name="balls" type="CT_Balls"/>
