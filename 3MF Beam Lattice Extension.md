@@ -56,7 +56,7 @@ This extension MUST be used only with Core specification 1.x.
 
 See [the 3MF Core Specification conventions](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#document-conventions).
 
-In this extension specification, as an example, the prefix "b" maps to the xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" and  the prefix "b2" maps to the xml namespace  "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07". See [Appendix C. Standard Namespaces](#appendix-c-standard-namespaces).
+In this extension specification, as an example, the prefix "b" maps to the base xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02", as defined in version 1.1, and the prefix "b2" maps to the xml namespace  "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07" defining balls. See [Appendix C. Standard Namespaces](#appendix-c-standard-namespaces).
 
 ## Language Notes
 
@@ -80,7 +80,7 @@ In order to find a balance between implementation complexity and capabilities, i
 
 While this is meant to be an exact specification of the lattice geometry, and consumers MUST interpret it as such, the intent is also for applications in which editors can use the data structures for efficient interoperability and post processing the geometry in an intermediate step.
 
-A producer using the lattice specification MUST mark the extension as required, as described in the core specification.
+A producer using the lattice specification MUST mark the base extension "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" as required, as described in the core specification. A producer MIGHT also mark the additional namespace for balls "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2020/07" as a required extension when the 3MF file contains beam lattices with balls. However, for backwards compatibility the producer SHOULD not mark it as a required extension when the 3MF file does not contain beam lattices with balls.
 
 ##### Figure 1-1: Overview of model XML structure of 3MF with beam lattice additions
 
