@@ -589,49 +589,44 @@ BallsWithinBeamLattice [http://schemas.microsoft.com/3dmanufacturing/beamlattice
 ### D.2. Beam lattices with balls example
 
 ```xml
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
 <model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter"
     xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02"
     xmlns:b2="http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07"
-    requiredextensions="b b2">
+    requiredextensions="b2">
     <resources>
-        <object id="1" name="pyramid" type="model">
+        <object id="1" name="Box" partnumber="e1ef01d4-cbd4-4a62-86b6-9634e2ca198b" type="model">
             <mesh>
                 <vertices>
-                    <vertex x="80.00000" y="34.64101" z="0"/>
-                    <vertex x="60.00000" y="69.28204" z="0"/>
-                    <vertex x="19.99999" y="69.28203" z="0"/>
-                    <vertex x="0" y="34.64101" z="0"/>
-                    <vertex x="20.00000" y="0" z="0"/>
-                    <vertex x="59.99999" y="0" z="0"/>
-                    <vertex x="40.00000" y="34.64101" z="50.00000"/>
-                    <vertex x="40.00000" y="34.64101" z="0"/>
+                    <vertex x="45.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="45.00000"/>
                 </vertices>
-                <b:beamlattice b2:ballmode="all" b2:ballradius="3" cap="butt" minlength="0.0001" radius="1">
+                <b:beamlattice radius="1" minlength="0.0001" cap="sphere" b2:ballmode="mixed" b2:ballradius="0.25">
                     <b:beams>
-                        <b:beam r1="1.50000" v1="5" v2="7"/>
-                        <b:beam r1="1.50000" v1="1" v2="7"/>
-                        <b:beam r1="1.50000" v1="0" v2="7"/>
-                        <b:beam r1="1.50000" v1="2" v2="7"/>
-                        <b:beam r1="1.50000" v1="3" v2="7"/>
-                        <b:beam r1="1.50000" v1="4" v2="7"/>
-                        <b:beam r1="1.50000" v1="0" v2="1"/>
-                        <b:beam r1="1.50000" v1="1" v2="2"/>
-                        <b:beam r1="1.50000" v1="2" v2="3"/>
-                        <b:beam r1="1.50000" v1="3" v2="4"/>
-                        <b:beam r1="1.50000" v1="0" v2="5"/>
-                        <b:beam r1="1.50000" v1="4" v2="5"/>
-                        <b:beam r1="1.50000" v1="5" v2="6"/>
-                        <b:beam r1="1.50000" v1="4" v2="6"/>
-                        <b:beam r1="1.50000" v1="3" v2="6"/>
-                        <b:beam r1="1.50000" v1="2" v2="6"/>
-                        <b:beam r1="1.50000" v1="0" v2="6"/>
-                        <b:beam r1="1.50000" v1="1" v2="6"/>
+                        <b:beam v1="0" v2="1" r1="1.50000" r2="1.60000"/>
+                        <b:beam v1="2" v2="0" r1="3.00000" r2="1.50000"/>
+                        <b:beam v1="1" v2="3" r1="1.60000" r2="3.00000"/>
+                        <b:beam v1="3" v2="2" r1="3.00000"/>
+                        <b:beam v1="2" v2="4" r1="3.00000" r2="2.00000"/>
+                        <b:beam v1="4" v2="5" r1="2.00000"/>
+                        <b:beam v1="5" v2="6" r1="2.00000"/>
+                        <b:beam v1="7" v2="6" r1="2.00000"/>
+                        <b:beam v1="1" v2="6" r1="1.60000" r2="2.00000"/>
+                        <b:beam v1="7" v2="4" r1="2.00000"/>
+                        <b:beam v1="7" v2="3" r1="2.00000" r2="3.00000"/>
+                        <b:beam v1="0" v2="5" r1="1.50000" r2="2.00000"/>
                     </b:beams>
                     <b2:balls>
-                        <b2:ball r="3" vindex="4"/>
-                        <b2:ball r="4" vindex="6"/>
-                    </b2:balls>
+                        <b2:ball vindex="0" r=".50"/>
+                        <b2:ball vindex="5"/>
+                        <b2:ball vindex="7" r=".50"/>
+                    </bs:balls>
                 </b:beamlattice>
             </mesh>
         </object>
