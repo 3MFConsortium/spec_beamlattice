@@ -593,7 +593,7 @@ BallsWithinBeamLattice [http://schemas.microsoft.com/3dmanufacturing/beamlattice
 <model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter"
     xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02"
     xmlns:b2="http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07"
-    requiredextensions="b2">
+    requiredextensions="b b2">
     <resources>
         <object id="1" name="Box" partnumber="e1ef01d4-cbd4-4a62-86b6-9634e2ca198b" type="model">
             <mesh>
