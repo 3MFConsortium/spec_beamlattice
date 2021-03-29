@@ -12,7 +12,7 @@
 
 
 
-| **Version** | 1.1.0 |
+| **Version** | 1.2.0 |
 | --- | --- |
 | **Status** | Published |
 
@@ -34,8 +34,8 @@ THESE MATERIALS ARE PROVIDED "AS IS." The contributors expressly disclaim any wa
 - [Part II. Appendixes](#part-ii-appendixes)
   * [Appendix A. Glossary](#appendix-a-glossary)
   * [Appendix B. 3MF XSD Schema](#appendix-b-3mf-xsd-schema)
-  * [Appendix C. Standard Namespace](#appendix-c-standard-namespace)
-  * [Appendix D: Example file](#appendix-d-example-file)
+  * [Appendix C. Standard Namespaces](#appendix-c-standard-namespaces)
+  * [Appendix D: Example files](#appendix-d-example-files)
 - [References](#references)
 
 # Preface
@@ -56,7 +56,7 @@ This extension MUST be used only with Core specification 1.x.
 
 See [the 3MF Core Specification conventions](https://github.com/3MFConsortium/spec_core/blob/master/3MF%20Core%20Specification.md#document-conventions).
 
-In this extension specification, as an example, the prefix "b" maps to the xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02". See [Appendix C. Standard Namespace](#appendix-c-standard-namespace).
+In this extension specification, as an example, the prefix "b" maps to the base xml-namespace "http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02", as defined in version 1.1, and the prefix "b2" maps to the xml namespace  "http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07" defining balls. See [Appendix C. Standard Namespaces](#appendix-c-standard-namespaces).
 
 ## Language Notes
 
@@ -80,7 +80,11 @@ In order to find a balance between implementation complexity and capabilities, i
 
 While this is meant to be an exact specification of the lattice geometry, and consumers MUST interpret it as such, the intent is also for applications in which editors can use the data structures for efficient interoperability and post processing the geometry in an intermediate step.
 
-A producer using the lattice specification MUST mark the extension as required, as described in the core specification.
+This extension specification contains two schemas, one for the beam lattice elements and the other for ball elements.
+
+A producer using the lattice specification MUST mark the "b" extension as required, as described in the core specification. A producer SHOULD also mark the additional "b2" namespace for balls within beam lattices as a required extension when the 3MF file contains beam lattices with balls. However, for backwards compatibility, the producer SHOULD not mark the "b2" as a required extension when the 3MF file does not contain beam lattices with balls. 
+
+Please refer to the example 3MF file in [Appendix D: Example files](#appendix-d-example-files) for guidance on how to apply namespace prefixes appropriately to elements and attributes associated with this extension.
 
 ##### Figure 1-1: Overview of model XML structure of 3MF with beam lattice additions
 
@@ -191,7 +195,7 @@ A beam MAY combine two different capmodes on either vertex.
 
 >**Note** : In case of cylinders (i.e. both radii of a beam are equal), the notion of sphere and hemisphere leads to the same geometry.
 
-The unification of all beam and ball geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. To guarentee this, all beams MUST be capped prior to the unification process.
+The unification of all beam and ball geometries of a beamlattice and the triangle mesh will give a well-defined lattice geometry. To guarantee this, all beams MUST be capped prior to the unification process.
 
 Within the beamlattice, the surface properties of the geometry will be given by the unification of the surface properties of the beam elements. In the case of overlapping surface regions, the last beam MUST prevail, analogous to the corresponding overlapping rules of the core specification.
 
@@ -231,8 +235,8 @@ Element **\<ball>**
 | --- | --- | --- | --- | --- |
 | vindex   | **ST\_ResourceIndex** | required |    | References a zero-based index into the vertices of this mesh. Defines the vertex that serves as the center for this ball. |
 | r   | **ST\_PositiveNumber** | optional |    | The radius of this ball. |
-| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this sphere. |
-| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this beam. |
+| p | **ST\_ResourceIndex** | optional |   | Overrides the beamlattice-level pindex for this ball. |
+| pid | **ST\_ResourceID** | optional |   | Overrides the beamlattice-level pid for this ball. |
 
 The _ball element_ defines a sphere of a given radius centered at the position of the vertex defined by "vindex".  The vertex defined by "vindex" MUST be the end vertex of at least one beam.
 
@@ -305,9 +309,15 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
 
 ## Appendix B. 3MF XSD Schema
 
+### A.1. Beam lattice schema
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
+<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace"
+  targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02"
+  elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
   <xs:annotation>
     <xs:documentation>
       <![CDATA[
@@ -332,14 +342,11 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <xs:complexType name="CT_BeamLattice">
     <xs:sequence>
        <xs:element ref="beams"/>
-       <xs:element ref="balls" minOccurs="0" maxOccurs="1"/>
        <xs:element ref="beamsets" minOccurs="0" maxOccurs="1"/>
        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="minlength" type="ST_PositiveNumber" use="required"/>
     <xs:attribute name="radius" type="ST_PositiveNumber" use="required"/>
-    <xs:attribute name="ballmode" type="ST_BallMode" default="none"/>
-    <xs:attribute name="ballradius" type="ST_PositiveNumber"/>
     <xs:attribute name="clippingmode" type="ST_ClippingMode" default="none"/>
     <xs:attribute name="clippingmesh" type="ST_ResourceID" />
     <xs:attribute name="representationmesh" type="ST_ResourceID" />
@@ -369,29 +376,9 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
         <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
       </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="CT_Ball">
-     <xs:sequence>
-       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-     </xs:sequence>
-    <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
-    <xs:attribute name="r" type="ST_PositiveNumber" />
-    <xs:attribute name="p" type="ST_ResourceIndex" />
-    <xs:attribute name="pid" type="ST_ResourceID" />
-    <xs:anyAttribute namespace="##other" processContents="lax"/>
-  </xs:complexType>
-  <xs:complexType name="CT_Balls">
-      <xs:sequence>
-        <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
-        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-      </xs:sequence>
-  </xs:complexType>
   <xs:complexType name="CT_BeamSet">
     <xs:sequence>
       <xs:element ref="ref" minOccurs="0" maxOccurs="2147483647"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
-    </xs:sequence>
-    <xs:sequence>
-      <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/> 
     </xs:sequence>
     <xs:attribute name="name" type="xs:string"/>
@@ -411,21 +398,7 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
     <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
     <xs:anyAttribute namespace="##other" processContents="lax"/>
   </xs:complexType>
-   <xs:complexType name="CT_BallRef">
-    <xs:sequence>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
-    </xs:sequence>
-    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
-    <xs:anyAttribute namespace="##other" processContents="lax"/>
-  </xs:complexType>
   <!-- Simple Types -->
-  <xs:simpleType name="ST_BallMode">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="none"/>
-      <xs:enumeration value="mixed"/>
-      <xs:enumeration value="all"/>
-    </xs:restriction>
-  </xs:simpleType>
   <xs:simpleType name="ST_ClippingMode">
     <xs:restriction base="xs:string">
       <xs:enumeration value="none"/>
@@ -459,26 +432,122 @@ See [the 3MF Core Specification glossary](https://github.com/3MFConsortium/spec_
   <!-- Elements -->
   <xs:element name="beam" type="CT_Beam"/>
   <xs:element name="beams" type="CT_Beams"/>
-  <xs:element name="ball" type="CT_Ball"/>
-  <xs:element name="balls" type="CT_Balls"/>
   <xs:element name="ref" type="CT_Ref"/>
-  <xs:element name="ballref" type="CT_BallRef"/>
   <xs:element name="beamset" type="CT_BeamSet"/>
   <xs:element name="beamsets" type="CT_BeamSets"/>
   <xs:element name="beamlattice" type="CT_BeamLattice"/>
 </xs:schema>
 ```
+### A.2. Balls schema within beam lattices
 
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace"
+  targetNamespace="http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07"
+  elementFormDefault="unqualified" attributeFormDefault="unqualified" blockDefault="#all">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+  <xs:annotation>
+    <xs:documentation>
+      <![CDATA[
+    Schema notes:
+ 
+    Items within this schema follow a simple naming convention of appending a prefix indicating the type of element for references:
+ 
+    Unprefixed: Element names
+    CT_: Complex types
+    ST_: Simple types
+   
+    ]]>
+    </xs:documentation>
+  </xs:annotation>
+  <!-- Complex Types -->
+  <xs:complexType name="CT_BeamLattice">
+    <xs:sequence>
+       <xs:element ref="balls" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="ballmode" type="ST_BallMode" default="none"/>
+    <xs:attribute name="ballradius" type="ST_PositiveNumber"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_Ball">
+     <xs:sequence>
+       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+     </xs:sequence>
+    <xs:attribute name="vindex" type="ST_ResourceIndex" use="required" />
+    <xs:attribute name="r" type="ST_PositiveNumber" />
+    <xs:attribute name="p" type="ST_ResourceIndex" />
+    <xs:attribute name="pid" type="ST_ResourceID" />
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_Balls">
+      <xs:sequence>
+        <xs:element ref="ball" minOccurs="1" maxOccurs="2147483647"/>
+        <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+      </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CT_BallRef">
+    <xs:sequence>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="2147483647"/>
+    </xs:sequence>
+    <xs:attribute name="index" type="ST_ResourceIndex" use="required"/>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+  <xs:complexType name="CT_BeamSet">
+    <xs:sequence>
+      <xs:element ref="ballref" minOccurs="0" maxOccurs="2147483647"/>	
+    </xs:sequence>
+    <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>  
+  <!-- Simple Types -->
+  <xs:simpleType name="ST_BallMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="none"/>
+      <xs:enumeration value="mixed"/>
+      <xs:enumeration value="all"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_ResourceID">
+    <xs:restriction base="xs:positiveInteger">
+      <xs:maxExclusive value="2147483648"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_PositiveNumber">
+    <xs:restriction base="xs:double">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="((\+)?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))((e|E)(\-|\+)?[0-9]+)?)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ST_ResourceIndex">
+    <xs:restriction base="xs:nonNegativeInteger">
+      <xs:maxExclusive value="2147483648"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Elements -->  
+  <xs:element name="ball" type="CT_Ball"/>
+  <xs:element name="balls" type="CT_Balls"/>
+  <xs:element name="beamset" type="CT_BeamSet"/>
+  <xs:element name="ballref" type="CT_BallRef"/>
+  <xs:element name="beamlattice" type="CT_BeamLattice"/>
+</xs:schema>
+```
 
-## Appendix C. Standard Namespace
+## Appendix C. Standard Namespaces
 
 BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02](http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02)
 
-## Appendix D: Example file
+BallsWithinBeamLattice [http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07](http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07)
+
+## Appendix D: Example files
+
+### D.1. Beam lattices example
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter" xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02" requiredextensions="b">
+<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter"
+    xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02"
+    xmlns:b2="http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07"
+    requiredextensions="b">
     <resources>
         <object id="1" name="Box" partnumber="e1ef01d4-cbd4-4a62-86b6-9634e2ca198b" type="model">
             <mesh>
@@ -507,6 +576,57 @@ BeamLattice    [http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02
                         <b:beam v1="7" v2="3" r1="2.00000" r2="3.00000"/>
                         <b:beam v1="0" v2="5" r1="1.50000" r2="2.00000"/>
                     </b:beams>
+                </b:beamlattice>
+            </mesh>
+        </object>
+    </resources>
+    <build>
+        <item objectid="1"/>
+    </build>
+</model>
+```
+
+### D.2. Beam lattices with balls example
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<model xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" unit="millimeter"
+    xmlns:b="http://schemas.microsoft.com/3dmanufacturing/beamlattice/2017/02"
+    xmlns:b2="http://schemas.microsoft.com/3dmanufacturing/beamlattice/balls/2020/07"
+    requiredextensions="b b2">
+    <resources>
+        <object id="1" name="Box" partnumber="e1ef01d4-cbd4-4a62-86b6-9634e2ca198b" type="model">
+            <mesh>
+                <vertices>
+                    <vertex x="45.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="45.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="45.00000" y="45.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="45.00000"/>
+                    <vertex x="55.00000" y="55.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="55.00000"/>
+                    <vertex x="55.00000" y="45.00000" z="45.00000"/>
+                </vertices>
+                <b:beamlattice radius="1" minlength="0.0001" cap="sphere" b2:ballmode="mixed" b2:ballradius="0.25">
+                    <b:beams>
+                        <b:beam v1="0" v2="1" r1="1.50000" r2="1.60000"/>
+                        <b:beam v1="2" v2="0" r1="3.00000" r2="1.50000"/>
+                        <b:beam v1="1" v2="3" r1="1.60000" r2="3.00000"/>
+                        <b:beam v1="3" v2="2" r1="3.00000"/>
+                        <b:beam v1="2" v2="4" r1="3.00000" r2="2.00000"/>
+                        <b:beam v1="4" v2="5" r1="2.00000"/>
+                        <b:beam v1="5" v2="6" r1="2.00000"/>
+                        <b:beam v1="7" v2="6" r1="2.00000"/>
+                        <b:beam v1="1" v2="6" r1="1.60000" r2="2.00000"/>
+                        <b:beam v1="7" v2="4" r1="2.00000"/>
+                        <b:beam v1="7" v2="3" r1="2.00000" r2="3.00000"/>
+                        <b:beam v1="0" v2="5" r1="1.50000" r2="2.00000"/>
+                    </b:beams>
+                    <b2:balls>
+                        <b2:ball vindex="0" r=".50"/>
+                        <b2:ball vindex="5"/>
+                        <b2:ball vindex="7" r=".50"/>
+                    </bs:balls>
                 </b:beamlattice>
             </mesh>
         </object>
