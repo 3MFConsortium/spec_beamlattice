@@ -23,11 +23,11 @@
 
 #!/bin/bash
 
-mkdir ~/.grip
-echo "PASSWORD = '${GITHUB_API_KEY}'" > ~/.grip/settings.py
+# mkdir ~/.grip
+# echo "PASSWORD = '${GITHUB_API_KEY}'" > ~/.grip/settings.py
 
-# FILE="$1"
-# TMPFILE="temp.html"
+FILE="$1"
+TMPFILE="temp.html"
 
 /home/runner/.local/bin/grip "$FILE.md" --export "$FILE.html"
 sed "s|readme boxed-group clearfix announce instapaper_body md||g" "$FILE.html" > "$TMPFILE"
